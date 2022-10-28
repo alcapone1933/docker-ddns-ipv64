@@ -23,4 +23,5 @@ RUN mv /data/entrypoint.sh /usr/local/bin/entrypoint.sh && mv /data/cronjob /etc
 # VOLUME [ "/data" ]
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
-HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=2 CMD /usr/local/bin/healthcheck.sh
+HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=5 CMD curl -sSL --fail https://ipv64.net/ > /dev/null || exit 1
+# HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=2 CMD /usr/local/bin/healthcheck.sh
