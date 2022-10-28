@@ -23,7 +23,7 @@ trigger:
 ---
 kind: pipeline
 type: docker
-name: BUILD-Dockerhub
+name: BUILD-Dockerhub-Version
 steps:
   - name: Build Multi-arch
     image: alcapone1933/drone:docker-buildx
@@ -37,7 +37,7 @@ steps:
       repo: alcapone1933/ddns-ipv64
       # tags: latest
       auto_tag: true
-      auto_tag_suffix: v0.0.1, latest
+      auto_tag_suffix: v0.0.1
 
 trigger:
   branch:
@@ -53,7 +53,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: BUILD-GitHub
+name: BUILD-GitHub-Version
 steps:
   - name: Build Multi-arch
     image: alcapone1933/drone:docker-buildx
@@ -68,7 +68,7 @@ steps:
       repo: ghcr.io/alcapone1933/ddns-ipv64
       # tags: latest
       auto_tag: true
-      auto_tag_suffix: v0.0.1, latest
+      auto_tag_suffix: v0.0.1
 
 trigger:
   branch:
@@ -80,3 +80,62 @@ trigger:
 
 depends_on:
   - BUILD-Dockerhub
+
+---
+kind: pipeline
+type: docker
+name: BUILD-Dockerhub-Latest
+steps:
+  - name: Build Multi-arch
+    image: alcapone1933/drone:docker-buildx
+    privileged: true
+    settings:
+      username: 
+        from_secret: DOCKER_USER
+      password: 
+        from_secret: DOCKER_PASS    
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      repo: alcapone1933/ddns-ipv64
+      # tags: latest
+      auto_tag: true
+
+trigger:
+  branch:
+  - master
+  event:
+  - custom
+  - push
+  - pull_request
+
+depends_on:
+  - BUILD-GitHub-Version
+
+---
+kind: pipeline
+type: docker
+name: BUILD-GitHub-Latest
+steps:
+  - name: Build Multi-arch
+    image: alcapone1933/drone:docker-buildx
+    privileged: true
+    settings:
+      username: 
+        from_secret: GITHUB_USER
+      password: 
+        from_secret: GITHUB_PASS
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      registry: ghcr.io
+      repo: ghcr.io/alcapone1933/ddns-ipv64
+      # tags: latest
+      auto_tag: true
+
+trigger:
+  branch:
+  - master
+  event:
+  - custom
+  - push
+  - pull_request
+
+depends_on:
+  - BUILD-Dockerhub-Latest
