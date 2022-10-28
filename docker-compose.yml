@@ -13,7 +13,7 @@ services:
       # Standert Alle 15 Minuten
       - "CRON_TIME=*/15 * * * *"
       # Standert Alle 30 Minuten Abfrage ob der Domain eintrag richtig ist
-      - "CRON_TIME_DIG=*/30 00 * * *"
+      - "CRON_TIME_DIG=*/30 * * * *"
       - "DOMAIN_IPV64=DEINE DOMAIN https://ipv64.net/dyndns.php"
       - "DOMAIN_KEY=DEIN DOMAIN KEY bzw. DynDNS Updatehash"
 

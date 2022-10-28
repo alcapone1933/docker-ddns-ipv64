@@ -23,7 +23,7 @@ trigger:
 ---
 kind: pipeline
 type: docker
-name: BUILD
+name: BUILD-Dockerhub
 steps:
   - name: Build Multi-arch
     image: alcapone1933/drone:docker-buildx
@@ -49,3 +49,35 @@ trigger:
 
 depends_on:
   - BUILD-TEST
+
+---
+kind: pipeline
+type: docker
+name: BUILD-GitHub
+steps:
+  - name: Build Multi-arch
+    image: alcapone1933/drone:docker-buildx
+    privileged: true
+    settings:
+      username: 
+        from_secret: GITHUB_USER
+      password: 
+        from_secret: GITHUB_PASS
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      registry: ghcr.io
+      repo: ghcr.io/alcapone1933/ddns-ipv64
+      auto_tag: true
+      # tags: latest
+      auto_tag: true
+      auto_tag_suffix: v0.0.1
+
+trigger:
+  branch:
+  - master
+  event:
+  - custom
+  - push
+  - pull_request
+
+depends_on:
+  - BUILD-Dockerhub
