@@ -66,7 +66,6 @@ steps:
       platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
       registry: ghcr.io
       repo: ghcr.io/alcapone1933/ddns-ipv64
-      auto_tag: true
       # tags: latest
       auto_tag: true
       auto_tag_suffix: v0.0.1
