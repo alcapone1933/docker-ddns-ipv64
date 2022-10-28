@@ -20,7 +20,7 @@ COPY data /data
 RUN mv /data/entrypoint.sh /usr/local/bin/entrypoint.sh && mv /data/cronjob /etc/cron.d/container_cronjob && mv /data/healthcheck.sh /usr/local/bin/healthcheck.sh  && \
     chmod 755 /data/ddns-update.sh &&  chmod 755 /usr/local/bin/entrypoint.sh && chmod 755 /usr/local/bin/healthcheck.sh && \
     chmod 755 /etc/cron.d/container_cronjob && touch /var/log/cron.log
-VOLUME [ "/data" ]
+# VOLUME [ "/data" ]
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=2 CMD /usr/local/bin/healthcheck.sh
