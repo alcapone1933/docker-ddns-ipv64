@@ -1,22 +1,23 @@
 version: "3.9"
 services:
   ddnss-cron:
-    build:
-      dockerfile: ./Dockerfile
-    image: alcapone1933/ddns-ipv64:v0.0.1
+    # build:
+      # dockerfile: ./Dockerfile
+    image: alcapone1933/ddns-ipv64:latest
     container_name: ddns-ipv64
-    # restart: always
-    # volumes:
-      # - data:/data
+    restart: always
+    volumes:
+      - data:/data
     environment:
       - "TZ=Europe/Berlin"
       # Standert Alle 15 Minuten
-      - "CRON_TIME=*/1 * * * *"
-      - "CRON_TIME_DIG=*/2 00 * * *"
-      - "DOMAIN_IPV64=
-      - "DOMAIN_KEY="
+      - "CRON_TIME=*/15 * * * *"
+      # Standert Alle 30 Minuten Abfrage ob der Domain eintrag richtig ist
+      - "CRON_TIME_DIG=*/30 00 * * *"
+      - "DOMAIN_IPV64=DEINE DOMAIN https://ipv64.net/dyndns.php"
+      - "DOMAIN_KEY=DEIN DOMAIN KEY bzw. DynDNS Updatehash"
 
 
-# volumes:
-  # data:
-    # name: ddns
+volumes:
+  data:
+    name: ddns-ipv64_data
