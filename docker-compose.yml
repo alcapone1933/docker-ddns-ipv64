@@ -6,8 +6,8 @@ services:
     image: alcapone1933/ddns-ipv64:latest
     container_name: ddns-ipv64
     restart: always
-    volumes:
-      - data:/data
+    # volumes:
+      # - data:/data
     environment:
       - "TZ=Europe/Berlin"
       # Standert Alle 15 Minuten
@@ -18,6 +18,6 @@ services:
       - "DOMAIN_KEY=DEIN DOMAIN KEY bzw. DynDNS Updatehash"
 
 
-volumes:
-  data:
-    name: ddns-ipv64_data
+# volumes:
+  # data:
+    # name: ddns-ipv64_data
