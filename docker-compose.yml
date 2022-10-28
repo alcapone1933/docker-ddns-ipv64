@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  ddnss-cron:
+    build:
+      dockerfile: ./Dockerfile
+    image: alcapone1933/ddns-ipv64:v0.0.1
+    container_name: ddns-ipv64
+    # restart: always
+    # volumes:
+      # - data:/data
+    environment:
+      - "TZ=Europe/Berlin"
+      # Standert Alle 15 Minuten
+      - "CRON_TIME=*/1 * * * *"
+      - "CRON_TIME_DIG=*/2 00 * * *"
+      - "DOMAIN_IPV64=
+      - "DOMAIN_KEY="
+
+
+# volumes:
+  # data:
+    # name: ddns
