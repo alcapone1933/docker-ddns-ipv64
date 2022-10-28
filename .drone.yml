@@ -79,7 +79,7 @@ trigger:
   - pull_request
 
 depends_on:
-  - BUILD-Dockerhub
+  - BUILD-Dockerhub-Version
 
 ---
 kind: pipeline
