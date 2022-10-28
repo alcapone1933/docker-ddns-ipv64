@@ -11,7 +11,7 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
 
 ENV TZ=Europe/Berlin
 ENV CRON_TIME="*/15 * * * *"
-ENV CRON_TIME_DIG="00 06 * * *"
+ENV CRON_TIME_DIG="*/30 * * * *"
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools && \
     rm -rf /var/cache/apk/*
 
