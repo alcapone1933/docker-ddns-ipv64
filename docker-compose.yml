@@ -11,12 +11,12 @@ services:
       # - data:/data
     environment:
       - "TZ=Europe/Berlin"
-      # Standert Alle 15 Minuten
+      # Standard Abfrage Alle 15 Minuten nach der aktuellen ip
       - "CRON_TIME=*/15 * * * *"
-      # Standert Alle 30 Minuten Abfrage ob der Domain eintrag richtig ist
+      # Standard Abfrage Alle 30 Minuten für die Domain Adresse 
       - "CRON_TIME_DIG=*/30 * * * *"
-      - "DOMAIN_IPV64=DEINE DOMAIN https://ipv64.net/dyndns.php"
-      - "DOMAIN_KEY=DEIN DOMAIN KEY bzw. DynDNS Updatehash"
+      - "DOMAIN_IPV64=deine-domain.ipv64.net"
+      - "DOMAIN_KEY=1234567890abcdefghijklmn"
 
 
 # volumes:

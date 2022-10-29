@@ -21,9 +21,14 @@ docker run -d \
     --name ddns-ipv64 \
     -e "CRON_TIME=*/15 * * * *" \
     -e "CRON_TIME_DIG=*/30 * * * *" \
-    -e "DOMAIN_IPV64=DEINE DOMAIN https://ipv64.net/dyndns.php" \
-    -e "DOMAIN_KEY=DEIN DOMAIN KEY bzw. DynDNS Updatehash" \
+    -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
+    -e "DOMAIN_KEY=1234567890abcdefghijklmn" \
     alcapone1933/ddns-ipv64:latest
+
+#  Hier bitte deine DOMAIN eintragen(ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
+    -e "DOMAIN_IPV64=deine-domain.ipv64.net"
+#  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen(ersetzen) zu finden unter https://ipv64.net/dyndns.php Z.B "1234567890abcdefghijklmn"
+    -e "DOMAIN_KEY=1234567890abcdefghijklmn"
 
 ```
 
@@ -38,15 +43,16 @@ services:
     restart: always
     environment:
       - "TZ=Europe/Berlin"
-      # Standert Abfrage Alle 15 Minuten
+      # Standard Abfrage Alle 15 Minuten nach der aktuellen ip
       - "CRON_TIME=*/15 * * * *"
-      # Standert Alle 30 Minuten Abfrage ob der Domain eintrag richtig ist
+      # Standard Abfrage Alle 30 Minuten für die Domain Adresse 
       - "CRON_TIME_DIG=*/30 * * * *"
-      - "DOMAIN_IPV64=DEINE DOMAIN https://ipv64.net/dyndns.php"
-      - "DOMAIN_KEY=DEIN DOMAIN KEY bzw. DynDNS Updatehash"
+      #  Hier bitte deine DOMAIN eintragen(ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
+      - "DOMAIN_IPV64=deine-domain.ipv64.net"
+      #  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen(ersetzen) zu finden unter https://ipv64.net/dyndns.php Z.B "1234567890abcdefghijklmn"
+      - "DOMAIN_KEY=1234567890abcdefghijklmn"
 
 ```
-
 
 &nbsp;
 
@@ -54,9 +60,10 @@ services:
 
 ## Volume Parameter
 
-| Name (Beschreibung) #Optional | Wert    | Standert                                     |
-| ----------------------------- | ------- | -------------------------------------------- |
-| Speichertort logs und Script  | volume  | ddns-ipv64_data:/data oder /dein Pfad:/data  |
+| Name (Beschreibung) #Optional | Wert    | Standert              |
+| ----------------------------- | ------- | --------------------- |
+| Speichertort logs und Script  | volume  | ddns-ipv64_data:/data |
+|                               |         | dein Pfad:/data       |
 
 * * *
 
@@ -64,13 +71,13 @@ services:
 
 ## Env Parameter
 
-| Name (Beschreibung)                                             | Wert            | Standert           |
-| --------------------------------------------------------------- | --------------- | ------------------ |
-| Zeitzone                                                        | TZ              | Europe/Berlin      |
-| Zeitliche abfrage für die Aktuelle IP                           | CRON_TIME       | */15 * * * *       |
-| Zeitliche abfrage auf die Domain (dig DOMAIN_IPV64 A}           | CRON_TIME_DIG   | */30 * * * *       |
-| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash              | DOMAIN_KEY      | ------------------ |
-| DEINE DOMAIN: z.b. demo.ipv64.net https://ipv64.net/dyndns.php" | DOMAIN_IPV64    | ------------------ |
+| Name (Beschreibung)                                                                             | Wert            | Standert           |
+| ----------------------------------------------------------------------------------------------- | --------------- | ------------------ |
+| Zeitzone                                                                                        | TZ              | Europe/Berlin      |
+| Zeitliche abfrage für die Aktuelle IP                                                           | CRON_TIME       | */15 * * * *       |
+| Zeitliche abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG   | */30 * * * *       |
+| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php  | DOMAIN_KEY      | ------------------ |
+| DEINE DOMAIN: z.b. deine-domain.ipv64.net zu fiden unter          https://ipv64.net/dyndns.php  | DOMAIN_IPV64    | ------------------ |
 
 * * *
 
