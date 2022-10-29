@@ -27,6 +27,20 @@ else
     echo "Deine DOMAIN $DOMAIN_IPV64"
 fi
 
+IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
+CHECK=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=$IP" | grep -o "success")
+
+if [ "$CHECK" = "success" ] ; then
+    echo
+    echo "Die Angaben sind richtig gesetzt : DOMAIN und DOMAIN KEY"
+    echo
+
+else
+    echo
+    echo "Die Angaben sind falsch gesetzt : DOMAIN oder DOMAIN KEY"
+    echo
+fi
+echo "$IP" > /data/updip.txt
 curl -sSL --fail https://ipv64.net/ > /dev/null || exit 1
 echo "${CRON_TIME} /bin/bash /data/ddns-update.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
 echo "$CRON_TIME_DIG" 'echo "`date +%Y-%m-%d\ %H:%M:%S`  Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
