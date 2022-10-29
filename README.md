@@ -10,9 +10,10 @@
 ### DDNS Updater in Docker für die Webseite https://ipv64.net/ erst einmal nur für ipv4
 
 &nbsp;
-
 * * *
-### Docker CLI
+&nbsp;
+
+## Docker CLI
 
 ```bash
 docker run -d \
@@ -26,7 +27,7 @@ docker run -d \
 
 ```
 
-### Docker Compose
+## Docker Compose
 
 ```yaml
 version: "3.9"
@@ -46,7 +47,10 @@ services:
 
 ```
 
-* * *
+
+&nbsp;
+
+&nbsp;
 
 ## Volume Parameter
 
@@ -55,6 +59,8 @@ services:
 | Speichertort logs und Script  | volume  | ddns-ipv64_data:/data oder /dein Pfad:/data  |
 
 * * *
+
+&nbsp;
 
 ## Env Parameter
 
@@ -65,3 +71,11 @@ services:
 | Zeitliche abfrage auf die Domain (dig DOMAIN_IPV64 A}           | CRON_TIME_DIG   | */30 * * * *       |
 | DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash              | DOMAIN_KEY      | ------------------ |
 | DEINE DOMAIN: z.b. demo.ipv64.net https://ipv64.net/dyndns.php" | DOMAIN_IPV64    | ------------------ |
+
+* * *
+
+&nbsp;
+
+## DEMO
+
+![DEMO GIF](/demo/demo.gif)

@@ -44,8 +44,8 @@ trigger:
   - master
   event:
   - custom
-  - push
-  - pull_request
+  # - push
+  # - pull_request
 
 depends_on:
   - BUILD-TEST
@@ -75,8 +75,8 @@ trigger:
   - master
   event:
   - custom
-  - push
-  - pull_request
+  # - push
+  # - pull_request
 
 depends_on:
   - BUILD-Dockerhub-Version
@@ -104,8 +104,8 @@ trigger:
   - master
   event:
   - custom
-  - push
-  - pull_request
+  # - push
+  # - pull_request
 
 depends_on:
   - BUILD-GitHub-Version
@@ -134,8 +134,8 @@ trigger:
   - master
   event:
   - custom
-  - push
-  - pull_request
+  # - push
+  # - pull_request
 
 depends_on:
   - BUILD-Dockerhub-Latest
