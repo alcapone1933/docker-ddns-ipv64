@@ -4,13 +4,27 @@
 [![Build Status Branch Master](https://shields.cosanostra-cloud.de/drone/build/alcapone1933/docker-ddns-ipv64/master?logo=drone&label=build%20%5Bbranch%20master%5D&server=https%3A%2F%2Fdrone.docker-for-life.de)](https://drone.docker-for-life.de/alcapone1933/docker-ddns-ipv64/branches)
 [![Docker Pulls](https://shields.cosanostra-cloud.de/docker/pulls/alcapone1933/ddns-ipv64?logo=docker&logoColor=blue)](https://hub.docker.com/r/alcapone1933/ddns-ipv64/tags)
 ![Docker Image Version (latest semver)](https://shields.cosanostra-cloud.de/docker/v/alcapone1933/ddns-ipv64?sort=semver&logo=docker&logoColor=blue&label=dockerhub%20version)
+[![Website](https://shields.cosanostra-cloud.de/website?down_color=red&down_message=down&label=Status%20Webseite%20IPV64.NET&style=plastic&up_color=green&up_message=ready&url=https%3A%2F%2Fipv64.net%2F)](https://ipv64.net/)
+&nbsp;
+
+# DDNS Updater in Docker für Free DynDNS [IPv64.net](https://ipv64.net/) -NUR FÜR IPV4-
+
+Dieser Docker Container ist ein DDNS Updater für Free DynDNS - ipv64.net.
+
+Bei Änderung der ipv4 Adresse am Stantort wird eine die neue ipv4 Adresse an ipv64.net geschickt als A-Record.
+
+Wenn sie dieses Docker Projekt nutzen möchten ändern sie vor dem starten des Docker Contaiers die environments ab aus der vorlage.
 
 &nbsp;
 
-### DDNS Updater in Docker für die Webseite https://ipv64.net/ erst einmal nur für ipv4
+  * Hier bitte deine DOMAIN eintragen(ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
 
-&nbsp;
-* * *
+    `-e "DOMAIN_IPV64=deine-domain.ipv64.net"`
+
+  * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen(ersetzen) zu finden unter https://ipv64.net/dyndns.php Z.B "1234567890abcdefghijklmn"
+
+    `-e "DOMAIN_KEY=1234567890abcdefghijklmn"`
+
 &nbsp;
 
 ## Docker CLI
@@ -24,11 +38,6 @@ docker run -d \
     -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
     -e "DOMAIN_KEY=1234567890abcdefghijklmn" \
     alcapone1933/ddns-ipv64:latest
-
-#  Hier bitte deine DOMAIN eintragen(ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
-    -e "DOMAIN_IPV64=deine-domain.ipv64.net"
-#  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen(ersetzen) zu finden unter https://ipv64.net/dyndns.php Z.B "1234567890abcdefghijklmn"
-    -e "DOMAIN_KEY=1234567890abcdefghijklmn"
 
 ```
 
