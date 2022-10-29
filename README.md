@@ -78,4 +78,5 @@ services:
 
 ## DEMO
 
-![DEMO GIF](/demo/demo.gif)
+<img src="demo/demo.gif" width="700" height="400">
+
