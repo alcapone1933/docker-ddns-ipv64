@@ -34,11 +34,11 @@ if [ "$CHECK" = "success" ] ; then
     echo
     echo "Die Angaben sind richtig gesetzt : DOMAIN und DOMAIN KEY"
     echo
-
 else
     echo
     echo "Die Angaben sind falsch gesetzt : DOMAIN oder DOMAIN KEY"
     echo
+    exit 1
 fi
 echo "$IP" > /data/updip.txt
 curl -sSL --fail https://ipv64.net/ > /dev/null || exit 1
