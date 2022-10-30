@@ -11,17 +11,17 @@
 
 Dieser Docker Container ist ein DDNS Updater für Free DynDNS - ipv64.net.
 
-Bei Änderung der ipv4 Adresse am Stantord wird eine die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
+Bei Änderung der ipv4 Adresse am Standort wird eine die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
 
-Wenn sie dieses Docker Projekt nutzen möchten ändern sie vor dem starten des Docker Contaiers die environments ab aus der vorlage.
+Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor dem starten des Docker Containers.
 
 &nbsp;
 
-  * Hier bitte deine DOMAIN eintragen(ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
+  * Hier bitte deine DOMAIN eintragen (ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net"`
 
-  * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen(ersetzen) zu finden unter https://ipv64.net/dyndns.php Z.B "1234567890abcdefghijklmn"
+  * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
 
     `-e "DOMAIN_KEY=1234567890abcdefghijklmn"`
 
@@ -56,9 +56,9 @@ services:
       - "CRON_TIME=*/15 * * * *"
       # Standard Abfrage Alle 30 Minuten für die Domain Adresse 
       - "CRON_TIME_DIG=*/30 * * * *"
-      #  Hier bitte deine DOMAIN eintragen(ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
+      #  Hier bitte deine DOMAIN eintragen (ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
-      #  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen(ersetzen) zu finden unter https://ipv64.net/dyndns.php Z.B "1234567890abcdefghijklmn"
+      #  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
 
 ```
@@ -69,9 +69,9 @@ services:
 
 ## Volume Parameter
 
-| Name (Beschreibung) #Optional | Wert    | Standert              |
+| Name (Beschreibung) #Optional | Wert    | Standard              |
 | ----------------------------- | ------- | --------------------- |
-| Speichertort logs und Script  | volume  | ddns-ipv64_data:/data |
+| Speicherort logs und Script   | volume  | ddns-ipv64_data:/data |
 |                               |         | dein Pfad:/data       |
 
 * * *
@@ -80,10 +80,10 @@ services:
 
 ## Env Parameter
 
-| Name (Beschreibung)                                                                             | Wert            | Standert           |
+| Name (Beschreibung)                                                                             | Wert            | Standard           |
 | ----------------------------------------------------------------------------------------------- | --------------- | ------------------ |
 | Zeitzone                                                                                        | TZ              | Europe/Berlin      |
-| Zeitliche abfrage für die Aktuelle IP                                                           | CRON_TIME       | */15 * * * *       |
+| Zeitliche abfrage für die aktuelle IP                                                           | CRON_TIME       | */15 * * * *       |
 | Zeitliche abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG   | */30 * * * *       |
 | DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php  | DOMAIN_KEY      | ------------------ |
 | DEINE DOMAIN: z.b. deine-domain.ipv64.net zu fiden unter          https://ipv64.net/dyndns.php  | DOMAIN_IPV64    | ------------------ |
@@ -95,4 +95,3 @@ services:
 ## DEMO
 
 <img src="demo/demo.gif" width="700" height="400">
-
