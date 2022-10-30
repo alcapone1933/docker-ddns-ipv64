@@ -8,12 +8,12 @@ sleep 1
 
 if [ "$IP" == "$UPDIP" ]; then
     echo
-    echo "$DATUM  KEIN UPDATE - Aktuelle IP=$UPDIP"
+    echo "$DATUM  KEIN UPDATE - Aktuelle IP= $UPDIP"
     echo
 else
     echo
     echo "$DATUM  UPDATE !!! ..."
-    echo "$DATUM  UPDATE !!!  - Update IP= $IP - Alte-IP: $UPDIP"
+    echo "$DATUM  UPDATE !!!  - Update IP= $IP - Alte-IP= $UPDIP"
     sleep 1
     echo "$IP" > $PFAD/updip.txt
     echo
@@ -31,20 +31,20 @@ DOMAIN_CHECK=$(dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net)
 sleep 1
 if [ "$IP" == "$DOMAIN_CHECK" ]; then
     echo
-    echo "$DATUM  CHECK       - DOMAIN HAT DEN IP EINTRAG: `dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
+    echo "$DATUM  CHECK       - DOMAIN HAT DEN A-RECORD= `dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
     echo
 else
     echo
     echo "$DATUM  UPDATE !!! ..."
-    echo "$DATUM  UPDATE !!!  - NACHEINTAG DIE IP WIRD NOCH EINMAL GESETZT"
-    echo "$DATUM  UPDATE !!!  - Update IP= $IP - Alte-IP: $UPDIP"
+    echo "$DATUM  UPDATE !!!  - NACHEINTRAG DIE IP WIRD NOCH EINMAL GESETZT"
+    echo "$DATUM  UPDATE !!!  - Update IP= $IP - Alte-IP= $UPDIP"
     sleep 5
     echo
     curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}"
     # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>
     sleep 15
     echo
-    echo "$DATUM  NACHEINTAG  - DOMAIN HAT DEN IP EINTRAG: `dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
+    echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN IP EINTRAG= `dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
     echo
 fi
 }

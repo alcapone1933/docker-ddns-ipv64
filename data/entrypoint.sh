@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 # set -x
 set -e
+# cleanup
+cleanup() {
+    echo "================================  STOP DDNS UPDATER IPV64.NET ================================"
+}
+
+# Trap SIGTERM
+trap 'cleanup' SIGTERM
+
+echo -n "" > /var/log/cron.log
 sleep 10
+
 echo "================================ START DDNS UPDATER IPV64.NET ================================"
 
 if [ -z "${DOMAIN_KEY:-}" ] ; then
@@ -43,7 +53,7 @@ fi
 echo "${IP}" > /data/updip.txt
 curl -sSL --fail https://ipv64.net/ > /dev/null || exit 1
 echo "${CRON_TIME} /bin/bash /data/ddns-update.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
-echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
+echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
 
 sleep 2
 
@@ -51,4 +61,6 @@ sleep 2
 /usr/sbin/crond
 
 set tail -f /var/log/cron.log "$@"
-exec "$@"
+exec "$@" &
+
+wait $!

@@ -1,3 +1,3 @@
 # Cronjob DDNS Updater ipv64.net
 */15 * * * * /bin/bash /data/ddns-update.sh >> /var/log/cron.log 2>&1
-*/30 * * * * sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1
+*/30 * * * * sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1
