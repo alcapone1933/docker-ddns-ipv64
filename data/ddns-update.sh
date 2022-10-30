@@ -44,7 +44,7 @@ else
     # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>
     sleep 15
     echo
-    echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN IP EINTRAG= `dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
+    echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD= `dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
     echo
 fi
 }
