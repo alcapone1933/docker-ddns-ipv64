@@ -11,7 +11,7 @@
 
 Dieser Docker Container ist ein DDNS Updater für Free DynDNS - ipv64.net.
 
-Bei Änderung der ipv4 Adresse am Standort wird eine die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
+Bei Änderung der ipv4 Adresse am Standort, wird die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
 
 Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor dem starten des Docker Containers.
 
@@ -72,7 +72,7 @@ services:
 | Name (Beschreibung) #Optional | Wert    | Standard              |
 | ----------------------------- | ------- | --------------------- |
 | Speicherort logs und Script   | volume  | ddns-ipv64_data:/data |
-|                               |         | dein Pfad:/data       |
+|                               |         | /dein Pfad:/data      |
 
 * * *
 
@@ -83,8 +83,8 @@ services:
 | Name (Beschreibung)                                                                             | Wert            | Standard           |
 | ----------------------------------------------------------------------------------------------- | --------------- | ------------------ |
 | Zeitzone                                                                                        | TZ              | Europe/Berlin      |
-| Zeitliche abfrage für die aktuelle IP                                                           | CRON_TIME       | */15 * * * *       |
-| Zeitliche abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG   | */30 * * * *       |
+| Zeitliche Abfrage für die aktuelle IP                                                           | CRON_TIME       | */15 * * * *       |
+| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG   | */30 * * * *       |
 | DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php  | DOMAIN_KEY      | ------------------ |
 | DEINE DOMAIN: z.b. deine-domain.ipv64.net zu fiden unter          https://ipv64.net/dyndns.php  | DOMAIN_IPV64    | ------------------ |
 
@@ -95,3 +95,4 @@ services:
 ## DEMO
 
 <img src="demo/demo.gif" width="700" height="400">
+
