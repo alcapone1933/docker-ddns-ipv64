@@ -11,7 +11,7 @@
 
 Dieser Docker Container ist ein DDNS Updater für Free DynDNS - ipv64.net.
 
-Bei Änderung der ipv4 Adresse am Stantort wird eine die neue ipv4 Adresse an ipv64.net geschickt als A-Record.
+Bei Änderung der ipv4 Adresse am Stantord wird eine die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
 
 Wenn sie dieses Docker Projekt nutzen möchten ändern sie vor dem starten des Docker Contaiers die environments ab aus der vorlage.
 
