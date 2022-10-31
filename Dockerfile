@@ -3,7 +3,7 @@ FROM alpine:latest
 LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.created="$(date +%Y-%m-%d\ %H:%M)" \
       org.opencontainers.image.authors="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
-      org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/drone-build-test" \
+      org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/ddns-ipv64" \
       org.opencontainers.image.version="v0.0.3" \
       org.opencontainers.image.ref.name="alcapone1933/ddns-ipv64" \
       org.opencontainers.image.title="DDNS Updater ipv64.net" \
