@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
+if ! curl -sSL --fail https://ipv64.net/ > /dev/null; then
+    echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang"
+	exit 0
+fi
 PFAD="/data"
-IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
+# IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
+IP=$(curl -4ssL https://ipv64.net/update.php?howismyip | jq -r 'to_entries[] | "\(.value)"')
 UPDIP=$(cat $PFAD/updip.txt)
 
 sleep 1
@@ -17,8 +22,14 @@ else
     sleep 1
     echo "$IP" > $PFAD/updip.txt
     echo
-    curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}"
-    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>
+    # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
+    UPDATE_IP=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=$IP&output=min")
+    if [ "$UPDATE_IP" = "ok" ] ; then
+        echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP AN IPV64.NET GESENDET"
+    else
+        echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP NICHT GESENTET"
+    fi
+    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
     echo
 fi
 sleep 5
@@ -26,7 +37,8 @@ sleep 5
 function CHECK_A_DOMAIN() {
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 UPDIP=$(cat $PFAD/updip.txt)
-IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
+# IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
+IP=$(curl -4ssL https://ipv64.net/update.php?howismyip | jq -r 'to_entries[] | "\(.value)"')
 DOMAIN_CHECK=$(dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net)
 sleep 1
 if [ "$IP" == "$DOMAIN_CHECK" ]; then
@@ -40,8 +52,14 @@ else
     echo "$DATUM  UPDATE !!!  - Update IP= $IP - Alte-IP= $UPDIP"
     sleep 5
     echo
-    curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}"
-    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>
+    # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
+    UPDATE_IP=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=$IP&output=min")
+    if [ "$UPDATE_IP" = "ok" ] ; then
+        echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP AN IPV64.NET GESENDET"
+    else
+        echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP NICHT GESENTET"
+    fi
+    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
     sleep 15
     echo
     echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD= `dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
