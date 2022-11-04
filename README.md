@@ -21,6 +21,10 @@ Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net"`
 
+  * Wenn sie mehrer DOMAINS eintragen wollen bitte mit Komma trennen
+
+    `-e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"`
+
   * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
 
     `-e "DOMAIN_KEY=1234567890abcdefghijklmn"`
@@ -39,6 +43,8 @@ docker run -d \
     -e "DOMAIN_KEY=1234567890abcdefghijklmn" \
     alcapone1933/ddns-ipv64:latest
 
+
+    -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
 ```
 
 ## Docker Compose
@@ -58,6 +64,8 @@ services:
       - "CRON_TIME_DIG=*/30 * * * *"
       #  Hier bitte deine DOMAIN eintragen (ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
+      #  Wenn sie mehrer DOMAINS eintragen wollen bitte mit Komma trennen
+      # "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
       #  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
 
@@ -80,14 +88,14 @@ services:
 
 ## Env Parameter
 
-| Name (Beschreibung)                                                                             | Wert            | Standard           |
-| ----------------------------------------------------------------------------------------------- | --------------- | ------------------ |
-| Zeitzone                                                                                        | TZ              | Europe/Berlin      |
-| Zeitliche Abfrage für die aktuelle IP                                                           | CRON_TIME       | */15 * * * *       |
-| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG   | */30 * * * *       |
-| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php  | DOMAIN_KEY      | ------------------ |
-| DEINE DOMAIN: z.b. deine-domain.ipv64.net zu fiden unter          https://ipv64.net/dyndns.php  | DOMAIN_IPV64    | ------------------ |
-
+| Name (Beschreibung)                                                                            | Wert            | Standard           | Beispiel                                     |
+| ---------------------------------------------------------------------------------------------- | --------------- | ------------------ | -------------------------------------------- |
+| Zeitzone                                                                                       | TZ              | Europe/Berlin      | Europe/Berlin                                |
+| Zeitliche Abfrage für die aktuelle IP                                                          | CRON_TIME       | */15 * * * *       | */15 * * * *                                 |
+| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                          | CRON_TIME_DIG   | */30 * * * *       | */30 * * * *                                 |
+| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php | DOMAIN_KEY      | ------------------ | 1234567890abcdefghijklmn                     |
+| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu fiden unter         https://ipv64.net/dyndns.php | DOMAIN_IPV64    | ------------------ | deine-domain.ipv64.net                       |
+| DEINE DOMAINS: z.b. deine-domain.ipv64.net,deine-domain.ipv64.de                               | DOMAIN_IPV64    | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |                                                                   
 * * *
 
 &nbsp;
