@@ -15,6 +15,7 @@ ENV CRON_TIME_DIG="*/30 * * * *"
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools jq && \
     rm -rf /var/cache/apk/*
 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN mkdir -p /data /usr/local/bin/ /etc/cron.d/
 COPY data /data
 RUN mv /data/entrypoint.sh /usr/local/bin/entrypoint.sh && mv /data/cronjob /etc/cron.d/container_cronjob && mv /data/healthcheck.sh /usr/local/bin/healthcheck.sh  && \
