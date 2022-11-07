@@ -20,7 +20,8 @@ else
     echo "$IP" > $PFAD/updip.txt
     # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
     UPDATE_IP=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
-    if [ "$UPDATE_IP" = "ok" ] ; then
+    # if [ "$UPDATE_IP" = "ok" ] ; then
+    if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP AN IPV64.NET GESENDET"
     else
         echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP NICHT GESENTET"
@@ -47,7 +48,8 @@ else
     sleep 5
     # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
     UPDATE_IP=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
-    if [ "$UPDATE_IP" = "ok" ] ; then
+    # if [ "$UPDATE_IP" = "ok" ] ; then
+    if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP AN IPV64.NET GESENDET"
     else
         echo "$DATUM  UPDATE !!!  - UPDATE IP= $IP NICHT GESENTET"
