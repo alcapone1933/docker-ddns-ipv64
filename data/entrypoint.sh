@@ -38,7 +38,8 @@ fi
 # CHECK=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=$IP" | grep -o "success")
 IP=$(curl -4ssL https://ipv64.net/update.php?howismyip | jq -r 'to_entries[] | "\(.value)"')
 CHECK=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
-if [ "$CHECK" = "ok" ] ; then
+# if [ "$CHECK" = "ok" ] ; then
+if [[ "$CHECK" =~ (nochg|good) ]] ; then
     echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
     sleep 5 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @ns1.ipv64.net`"; done
 else
