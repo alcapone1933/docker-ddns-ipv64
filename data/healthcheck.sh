@@ -24,7 +24,7 @@ else
     echo "$DATUM  DOMAIN      - Deine DOMAIN $DOMAIN_IPV64"
 fi
 
-if ! curl -sSL --fail https://ipv64.net/ > /dev/null; then
+if ! curl -sSL --user-agent "${CURL_USER_AGENT}" --fail https://ipv64.net/ > /dev/null; then
     echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang"
 	exit 1
 fi
