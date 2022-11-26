@@ -17,6 +17,12 @@ Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor
 
 &nbsp;
 
+***
+
+## Erklärung
+
+### Domain
+
   * Hier bitte deine DOMAIN eintragen (ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net"`
@@ -25,11 +31,35 @@ Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"`
 
+&nbsp;
+
+### Domain Praefix
+
+  * Wenn sie einen DOMAIN PRAEFIX verwenden wollen, dann benutzen sie die Variable ***DOMAIN_PRAEFIX_YES=yes*** und ***DOMAIN_PRAEFIX***
+
+    `-e "DOMAIN_PRAEFIX_YES=yes"`
+  
+  * Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen) der unter https://ipv64.net/dyndns.php erstellt wurde.
+
+    `-e "DOMAIN_PRAEFIX=ddns"`
+
+⚠️ ***Sollten sie mehrer DOMAINS verwenden bitte nur ein PRAEFIX eintragen (ersetzen)*** ⚠️
+
+***Bei mehrern Domains würde es so ausehen, dass immer der selbe PRAEFIX werwendet wird.***
+
+***z.B für die domains würde es so ausehen ddns.deine-domain.ipv64.net und ddns.deine-domain.ipv64.de***
+
+&nbsp;
+
+### Domain Key
+
   * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
 
     `-e "DOMAIN_KEY=1234567890abcdefghijklmn"`
 
 &nbsp;
+
+***
 
 ## Docker CLI
 
@@ -44,7 +74,10 @@ docker run -d \
     alcapone1933/ddns-ipv64:latest
 
 
-    -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
+    -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de" \
+    -e "DOMAIN_PRAEFIX_YES=yes" \
+    "⚠️ Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen) ⚠️"
+    -e "DOMAIN_PRAEFIX=ddns" \
 ```
 
 ## Docker Compose
@@ -66,6 +99,10 @@ services:
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
       #  Wenn sie mehrer DOMAINS eintragen wollen bitte mit Komma trennen
       # "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
+      # Damit wird der Domain PRAEFIX aktiv genutzt
+      # - "DOMAIN_PRAEFIX_YES=yes"
+      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen) der unter https://ipv64.net/dyndns.php erstellt wurde ⚠️
+      # - "DOMAIN_PRAEFIX=ddns"
       #  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
 
@@ -73,7 +110,7 @@ services:
 
 &nbsp;
 
-&nbsp;
+***
 
 ## Volume Parameter
 
@@ -82,20 +119,22 @@ services:
 | Speicherort logs und Script   | volume  | ddns-ipv64_data:/data |
 |                               |         | /dein Pfad:/data      |
 
-* * *
-
 &nbsp;
 
 ## Env Parameter
 
-| Name (Beschreibung)                                                                            | Wert            | Standard           | Beispiel                                     |
-| ---------------------------------------------------------------------------------------------- | --------------- | ------------------ | -------------------------------------------- |
-| Zeitzone                                                                                       | TZ              | Europe/Berlin      | Europe/Berlin                                |
-| Zeitliche Abfrage für die aktuelle IP                                                          | CRON_TIME       | */15 * * * *       | */15 * * * *                                 |
-| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                          | CRON_TIME_DIG   | */30 * * * *       | */30 * * * *                                 |
-| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php | DOMAIN_KEY      | ------------------ | 1234567890abcdefghijklmn                     |
-| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu fiden unter         https://ipv64.net/dyndns.php | DOMAIN_IPV64    | ------------------ | deine-domain.ipv64.net                       |
-| DEINE DOMAINS: z.b. deine-domain.ipv64.net,deine-domain.ipv64.de                               | DOMAIN_IPV64    | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |                                                                   
+| Name (Beschreibung)                                                                            | Wert               | Standard           | Beispiel                                     |
+| ---------------------------------------------------------------------------------------------- | ------------------ | ------------------ | -------------------------------------------- |
+| Zeitzone                                                                                       | TZ                 | Europe/Berlin      | Europe/Berlin                                |
+| Zeitliche Abfrage für die aktuelle IP                                                          | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
+| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                          | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
+| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
+| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu fiden unter         https://ipv64.net/dyndns.php | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
+| DEINE DOMAINS: z.b. deine-domain.ipv64.net,deine-domain.ipv64.de                               | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
+| DOMAIN PRAEFIX YES: Damit wird der Domain PRAEFIX aktiv genutzt                                | DOMAIN_PRAEFIX_YES | no                 | yes                                          |
+| DEIN DOMAIN PRAEFIX: ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                               | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
+
+
 * * *
 
 &nbsp;
