@@ -7,13 +7,13 @@
 [![Website](https://shields.cosanostra-cloud.de/website?down_color=red&down_message=down&label=Status%20Webseite%20IPV64.NET&style=plastic&up_color=green&up_message=ready&url=https%3A%2F%2Fipv64.net%2F)](https://ipv64.net/)
 &nbsp;
 
-# DDNS Updater in Docker für Free DynDNS [IPv64.net](https://ipv64.net/) -NUR FÜR IPV4-
+# DDNS Updater in Docker für Free DynDNS [IPv64.net](https://ipv64.net/) - NUR FÜR IPV4 -
 
 Dieser Docker Container ist ein DDNS Updater für Free DynDNS - ipv64.net.
 
-Bei Änderung der ipv4 Adresse am Standort, wird die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
+Bei einer Änderung der ipv4 Adresse am Standort wird die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
 
-Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor dem starten des Docker Containers.
+Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments vor dem Starten des Docker Containers.
 
 &nbsp;
 
@@ -23,11 +23,11 @@ Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor
 
 ### Domain
 
-  * Hier bitte deine DOMAIN eintragen (ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
+  * Hier bitte deine DOMAIN eintragen (ersetzen), die unter https://ipv64.net/dyndns.php erstellt wurde, z.B "deine-domain.ipv64.net"
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net"`
 
-  * Wenn sie mehrer DOMAINS eintragen wollen bitte mit Komma trennen
+  * Wenn Du mehrere DOMAINS eintragen willst, bitte mit Komma trennen:
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"`
 
@@ -35,19 +35,19 @@ Wenn sie dieses Docker Projekt nutzen möchten, ändern sie die Environments vor
 
 ### Domain Praefix
 
-  * Wenn sie einen DOMAIN PRAEFIX verwenden wollen, dann benutzen sie die Variable ***DOMAIN_PRAEFIX_YES=yes*** und ***DOMAIN_PRAEFIX***
+  * Wenn Du einen DOMAIN PRAEFIX verwenden willst, dann benutze die Variablen ***DOMAIN_PRAEFIX_YES=yes*** und ***DOMAIN_PRAEFIX***
 
     `-e "DOMAIN_PRAEFIX_YES=yes"`
   
-  * Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen) der unter https://ipv64.net/dyndns.php erstellt wurde.
+  * Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen), das unter https://ipv64.net/dyndns.php erstellt wurde:
 
     `-e "DOMAIN_PRAEFIX=ddns"`
 
-⚠️ ***Sollten sie mehrer DOMAINS verwenden bitte nur ein PRAEFIX eintragen (ersetzen)*** ⚠️
+⚠️ ***Solltest Du mehrere DOMAINS verwenden, dann bitte nur ein PRAEFIX eintragen (ersetzen)*** ⚠️
 
-***Bei mehrern Domains würde es so ausehen, dass immer der selbe PRAEFIX werwendet wird.***
+***Bei mehreren Domains wird immer derselbe PRAEFIX verwendet.***
 
-***z.B für die domains würde es so ausehen ddns.deine-domain.ipv64.net und ddns.deine-domain.ipv64.de***
+***Beispiel: ddns.deine-domain.ipv64.net und ddns.deine-domain.ipv64.de***
 
 &nbsp;
 
@@ -76,7 +76,7 @@ docker run -d \
 
     -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de" \
     -e "DOMAIN_PRAEFIX_YES=yes" \
-    "⚠️ Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen) ⚠️"
+    "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
     -e "DOMAIN_PRAEFIX=ddns" \
 ```
 
@@ -91,19 +91,19 @@ services:
     restart: always
     environment:
       - "TZ=Europe/Berlin"
-      # Standard Abfrage Alle 15 Minuten nach der aktuellen ip
+      # Standard Abfrage alle 15 Minuten nach der aktuellen ip
       - "CRON_TIME=*/15 * * * *"
-      # Standard Abfrage Alle 30 Minuten für die Domain Adresse 
+      # Standard Abfrage alle 30 Minuten für die Domain Adresse 
       - "CRON_TIME_DIG=*/30 * * * *"
-      #  Hier bitte deine DOMAIN eintragen (ersetzen) die unter https://ipv64.net/dyndns.php erstellt wurde Z.B "deine-domain.ipv64.net"
+      #  Hier bitte deine DOMAIN eintragen (ersetzen), die unter https://ipv64.net/dyndns.php erstellt wurde, z.B "deine-domain.ipv64.net"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
-      #  Wenn sie mehrer DOMAINS eintragen wollen bitte mit Komma trennen
+      #  Wenn Du mehrere DOMAINS eintragen willst, bitte mit Komma trennen:
       # "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
-      # Damit wird der Domain PRAEFIX aktiv genutzt
+      # Damit wird das Domain PRAEFIX aktiv genutzt
       # - "DOMAIN_PRAEFIX_YES=yes"
-      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen) der unter https://ipv64.net/dyndns.php erstellt wurde ⚠️
+      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen), das unter https://ipv64.net/dyndns.php erstellt wurde. Gilt auch bei mehreren Domains ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
-      #  Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
+      # Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
 
 ```
@@ -116,23 +116,23 @@ services:
 
 | Name (Beschreibung) #Optional | Wert    | Standard              |
 | ----------------------------- | ------- | --------------------- |
-| Speicherort logs und Script   | volume  | ddns-ipv64_data:/data |
+| Speicherort logs und script   | volume  | ddns-ipv64_data:/data |
 |                               |         | /dein Pfad:/data      |
 
 &nbsp;
 
 ## Env Parameter
 
-| Name (Beschreibung)                                                                            | Wert               | Standard           | Beispiel                                     |
-| ---------------------------------------------------------------------------------------------- | ------------------ | ------------------ | -------------------------------------------- |
-| Zeitzone                                                                                       | TZ                 | Europe/Berlin      | Europe/Berlin                                |
-| Zeitliche Abfrage für die aktuelle IP                                                          | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
-| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                          | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
-| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu fiden unter https://ipv64.net/dyndns.php | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
-| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu fiden unter         https://ipv64.net/dyndns.php | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
-| DEINE DOMAINS: z.b. deine-domain.ipv64.net,deine-domain.ipv64.de                               | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
-| DOMAIN PRAEFIX YES: Damit wird der Domain PRAEFIX aktiv genutzt                                | DOMAIN_PRAEFIX_YES | no                 | yes                                          |
-| DEIN DOMAIN PRAEFIX: ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                               | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
+| Name (Beschreibung)                                                                             | Wert               | Standard           | Beispiel                                     |
+| ----------------------------------------------------------------------------------------------- | ------------------ | ------------------ | -------------------------------------------- |
+| Zeitzone                                                                                        | TZ                 | Europe/Berlin      | Europe/Berlin                                |
+| Zeitliche Abfrage für die aktuelle IP                                                           | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
+| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
+| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns.php | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
+| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns.php | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
+| DEINE DOMAINS: z.b. deine-domain.ipv64.net, deine-domain.ipv64.de                               | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
+| DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                 | DOMAIN_PRAEFIX_YES | no                 | yes                                          |
+| DEIN DOMAIN PRAEFIX (subdomain) : ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                    | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
 
 
 * * *
@@ -142,4 +142,3 @@ services:
 ## DEMO
 
 <img src="demo/demo.gif" width="700" height="400">
-
