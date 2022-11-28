@@ -76,7 +76,7 @@ docker run -d \
 
     -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de" \
     -e "DOMAIN_PRAEFIX_YES=yes" \
-    "⚠️ Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen) ⚠️"
+    "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
     -e "DOMAIN_PRAEFIX=ddns" \
 ```
 
@@ -101,7 +101,7 @@ services:
       # "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
       # Damit wird das Domain PRAEFIX aktiv genutzt
       # - "DOMAIN_PRAEFIX_YES=yes"
-      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX eintragen (ersetzen), das unter https://ipv64.net/dyndns.php erstellt wurde. Gilt auch bei mehreren Domains ⚠️
+      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen), das unter https://ipv64.net/dyndns.php erstellt wurde. Gilt auch bei mehreren Domains ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
       # Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
