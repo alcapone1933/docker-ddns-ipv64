@@ -73,7 +73,6 @@ echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed 
 
 function Domain_mit_praefix() {
 CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}&output=min")
-# if [ "$CHECK" = "ok" ] ; then
 if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
     echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
     sleep 5
@@ -86,10 +85,46 @@ echo "${CRON_TIME} /bin/bash /data/ddns-update-praefix.sh >> /var/log/cron.log 2
 echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
 }
 
-if [[ "$DOMAIN_PRAEFIX_YES" =~ (YES|yes|Yes) ]] ; then
-    Domain_mit_praefix
+function Domain_dkey() {
+CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?dkey=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
+if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
+    echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
+    sleep 5
+    echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net`"
 else
-    Domain_default
+    echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: DOMAIN oder DOMAIN KEY"
+    exit 1
+fi
+echo "${CRON_TIME} /bin/bash /data/ddns-update-dkey.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
+echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
+}
+
+function Domain_dkey_mit_praefix() {
+CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?dkey=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}&output=min")
+if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
+    echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
+    sleep 5
+    echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`"
+else
+    echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: DOMAIN mit PRAEFIX oder DOMAIN KEY"
+    exit 1
+fi
+echo "${CRON_TIME} /bin/bash /data/ddns-update-dkey-praefix.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
+echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
+}
+
+if [[ "$DOMAIN_KEY_TYPE" =~ (dkey|DKEY|Dkey) ]] ; then
+    if [[ "$DOMAIN_PRAEFIX_YES" =~ (YES|yes|Yes) ]] ; then
+        Domain_dkey_mit_praefix
+    else
+        Domain_dkey
+    fi
+else
+    if [[ "$DOMAIN_PRAEFIX_YES" =~ (YES|yes|Yes) ]] ; then
+        Domain_mit_praefix
+    else
+        Domain_default
+    fi
 fi
 
 echo "${IP}" > /data/updip.txt

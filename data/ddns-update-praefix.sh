@@ -25,7 +25,7 @@ else
     else
         echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP NICHT GESENTET"
     fi
-    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&praefix=${DOMAIN_PRAEFIX}&ip=<ipaddr>&ip6=<ip6addr>&output=min
+    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}praefix=${DOMAIN_PRAEFIX}&ip=<ipaddr>&ip6=<ip6addr>&output=min
 fi
 sleep 5
 # Nachpruefung ob der DOMAIN Eintrag richtig gesetzt ist
@@ -38,7 +38,7 @@ IP=$(curl -4ssL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?
 DOMAIN_CHECK=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net; done | tail -n 1)
 sleep 1
 if [ "$IP" == "$DOMAIN_CHECK" ]; then
-    # echo "$DATUM  CHECK       - DOMAIN mit PRAEFIX HAT DEN A-RECORD= `dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`"
+    # echo "$DATUM  CHECK       - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`"
     for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  CHECK       - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net`"; done
 else
     echo "$DATUM  UPDATE !!! ..."
@@ -53,9 +53,9 @@ else
     else
         echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP NICHT GESENTET"
     fi
-    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=<ipaddr>&ip6=<ip6addr>&output=min
+    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=<ipaddr>&ip6=<ip6addr>&output=min
     sleep 15
-    # echo "$DATUM  NACHEINTRAG - DOMAIN mit PRAEFIX HAT DEN A-RECORD= `dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`"
+    # echo "$DATUM  NACHEINTRAG - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`"
     for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  NACHEINTRAG - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net`"; done
 fi
 }
