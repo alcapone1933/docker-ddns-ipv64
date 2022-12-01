@@ -53,16 +53,10 @@ Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments v
 
 ### Domain Key
 
-  * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen) oder den dkey.\
+  * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). \
     Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
 
     `-e "DOMAIN_KEY=1234567890abcdefghijklmn"`
-
-  * Es gibt auch die Möglichkeit den DNS-Update Befehl für eine bestimmte Domain durchzuführen. \
-    Dann benutze die Variable ***DOMAIN_KEY_TYPE=dkey*** einfach anstatt Standard key. \
-    Der dkey ist zu fiden im unter https://ipv64.net/dyndns.php wenn man auf eine Domain klickt.
-
-    `-e "DOMAIN_KEY_TYPE=dkey"`
 
 &nbsp;
 
@@ -85,7 +79,7 @@ docker run -d \
     -e "DOMAIN_PRAEFIX_YES=yes" \
     "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
     -e "DOMAIN_PRAEFIX=ddns" \
-    -e "DOMAIN_KEY_TYPE=dkey" \
+
 ```
 
 ## Docker Compose
@@ -113,8 +107,6 @@ services:
       # - "DOMAIN_PRAEFIX=ddns"
       # Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
-      # Der KEY TYPE ist für eine Domain oder mehrere Domains zuständig und gültig
-      # - "DOMAIN_KEY_TYPE=dkey"
 
 ```
 
@@ -139,7 +131,6 @@ services:
 | Zeitliche Abfrage für die aktuelle IP                                                           | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
 | Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
 | DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns.php | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
-| DOMAIN KEY TYPE: Der KEY TYPE ist für eine Domain oder mehrere Domains zuständig und gültig     | DOMAIN_KEY_TYPE    | key                | dkey                                         |
 | DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns.php | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
 | DEINE DOMAINS: z.b. deine-domain.ipv64.net, deine-domain.ipv64.de                               | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
 | DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                 | DOMAIN_PRAEFIX_YES | no                 | yes                                          |
