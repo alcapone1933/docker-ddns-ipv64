@@ -4,7 +4,8 @@
 [![Build Status Branch Master](https://shields.cosanostra-cloud.de/drone/build/alcapone1933/docker-ddns-ipv64/master?logo=drone&label=build%20%5Bbranch%20master%5D&server=https%3A%2F%2Fdrone.docker-for-life.de)](https://drone.docker-for-life.de/alcapone1933/docker-ddns-ipv64/branches)
 [![Docker Pulls](https://shields.cosanostra-cloud.de/docker/pulls/alcapone1933/ddns-ipv64?logo=docker&logoColor=blue)](https://hub.docker.com/r/alcapone1933/ddns-ipv64/tags)
 ![Docker Image Version (latest semver)](https://shields.cosanostra-cloud.de/docker/v/alcapone1933/ddns-ipv64?sort=semver&logo=docker&logoColor=blue&label=dockerhub%20version)
-[![Website](https://shields.cosanostra-cloud.de/website?down_color=red&down_message=down&label=Status%20Webseite%20IPV64.NET&style=plastic&up_color=green&up_message=ready&url=https%3A%2F%2Fipv64.net%2F)](https://ipv64.net/)
+[![Website](https://shields.cosanostra-cloud.de/website?down_color=red&down_message=DOWN&label=Webseite%20IPV64.NET&up_color=green&up_message=UP&url=https%3A%2F%2Fipv64.net%2F)](https://ipv64.net/)
+
 &nbsp;
 
 # DDNS Updater in Docker für Free DynDNS [IPv64.net](https://ipv64.net/) - NUR FÜR IPV4 -
