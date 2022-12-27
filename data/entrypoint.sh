@@ -16,13 +16,13 @@ echo "================================ START DDNS UPDATER IPV64.NET ============
 
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
-        echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
         exit 1
     else
         echo "$DATUM  PRAEFIX     - Sie haben ein DOMAIN PRAEFIX gesetzt"
     fi
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
         exit 1
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
@@ -30,7 +30,7 @@ if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     fi
 else
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
         exit 1
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
@@ -40,7 +40,7 @@ else
 fi
 
 if [ -z "${DOMAIN_KEY:-}" ] ; then
-    echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei  DynDNS Updatehash"
+    echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei DynDNS Updatehash"
     exit 1
 else
     echo "$DATUM  DOMAIN KEY  - Sie haben einen DOMAIN Key gesetzt"
@@ -55,12 +55,12 @@ if [ -z "${SHOUTRRR_URL:-}" ] ; then
     echo "$DATUM  SHOUTRRR    - Sie haben keine SHOUTRRR URL gesetzt"
 else
     echo "$DATUM  SHOUTRRR    - Sie haben eine  SHOUTRRR URL gesetzt"
-    SHOUTRRR_CHECK=$(/usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "$DATUM  TEST - DDNS Updater in Docker fuer Free DynDNS IPv64.net" 2>&1 | grep -o "sent")
-    if [ "$SHOUTRRR_CHECK" = "sent" ] ; then
-        echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: SHOUTRRR URL"
-    else
+    if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  TEST !!! \nDDNS Updater in Docker fuer Free DynDNS IPv64.net"`" 2> /dev/null; then
         echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: SHOUTRRR URL"
+        echo "$DATUM    INFO !!!  - Schaue unter https://containrrr.dev/shoutrrr/ nach dem richtigen URL Format"
         exit 1
+    else
+        echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: SHOUTRRR URL"
     fi
 fi
 
