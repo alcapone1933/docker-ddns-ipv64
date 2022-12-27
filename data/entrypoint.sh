@@ -46,9 +46,22 @@ else
     echo "$DATUM  DOMAIN KEY  - Sie haben einen DOMAIN Key gesetzt"
 fi
 
-if ! curl -sSL --user-agent "${CURL_USER_AGENT}" --fail https://ipv64.net/ > /dev/null; then
+if ! curl -sSL --user-agent "${CURL_USER_AGENT}" --fail "https://ipv64.net" > /dev/null; then
     echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
-    exit 0
+	exit 0
+fi
+
+if [ -z "${SHOUTRRR_URL:-}" ] ; then
+    echo "$DATUM  SHOUTRRR    - Sie haben keine SHOUTRRR URL gesetzt"
+else
+    echo "$DATUM  SHOUTRRR    - Sie haben eine  SHOUTRRR URL gesetzt"
+    SHOUTRRR_CHECK=$(/usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "$DATUM  TEST - DDNS Updater in Docker fuer Free DynDNS IPv64.net" 2>&1 | grep -o "sent")
+    if [ "$SHOUTRRR_CHECK" = "sent" ] ; then
+        echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: SHOUTRRR URL"
+    else
+        echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: SHOUTRRR URL"
+        exit 1
+    fi
 fi
 
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)

@@ -7,7 +7,7 @@ steps:
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       repo: alcapone1933/ddns-ipv64
       tags: latest
       dry_run: true
@@ -33,7 +33,7 @@ steps:
         from_secret: DOCKER_USER
       password: 
         from_secret: DOCKER_PASS    
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       repo: alcapone1933/ddns-ipv64
       # tags: latest
       auto_tag: true
@@ -63,7 +63,7 @@ steps:
         from_secret: GITHUB_USER
       password: 
         from_secret: GITHUB_PASS
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       registry: ghcr.io
       repo: ghcr.io/alcapone1933/ddns-ipv64
       # tags: latest
@@ -94,7 +94,7 @@ steps:
         from_secret: DOCKER_USER
       password: 
         from_secret: DOCKER_PASS    
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       repo: alcapone1933/ddns-ipv64
       # tags: latest
       auto_tag: true
@@ -123,7 +123,7 @@ steps:
         from_secret: GITHUB_USER
       password: 
         from_secret: GITHUB_PASS
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       registry: ghcr.io
       repo: ghcr.io/alcapone1933/ddns-ipv64
       # tags: latest

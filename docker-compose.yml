@@ -11,16 +11,15 @@ services:
       # - data:/data
     environment:
       - "TZ=Europe/Berlin"
-      # Standard Abfrage Alle 15 Minuten nach der aktuellen ip
       - "CRON_TIME=*/15 * * * *"
-      # Standard Abfrage Alle 30 Minuten für die Domain Adresse 
       - "CRON_TIME_DIG=*/30 * * * *"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
       # - "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
       # - "DOMAIN_PRAEFIX_YES=yes"
-      # ⚠️ Nur ein Praefix verwenden ⚠️
+      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
+      # - "SHOUTRRR_URL="
 # volumes:
   # data:
     # name: ddns-ipv64_data

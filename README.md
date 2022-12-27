@@ -80,7 +80,7 @@ docker run -d \
     -e "DOMAIN_PRAEFIX_YES=yes" \
     "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
     -e "DOMAIN_PRAEFIX=ddns" \
-
+    -e "SHOUTRRR_URL=" \
 ```
 
 ## Docker Compose
@@ -94,21 +94,15 @@ services:
     restart: always
     environment:
       - "TZ=Europe/Berlin"
-      # Standard Abfrage alle 15 Minuten nach der aktuellen ip
       - "CRON_TIME=*/15 * * * *"
-      # Standard Abfrage alle 30 Minuten für die Domain Adresse 
       - "CRON_TIME_DIG=*/30 * * * *"
-      #  Hier bitte deine DOMAIN eintragen (ersetzen), die unter https://ipv64.net/dyndns.php erstellt wurde, z.B "deine-domain.ipv64.net"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
-      #  Wenn Du mehrere DOMAINS eintragen willst, bitte mit Komma trennen:
       # - "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
-      # Damit wird das Domain PRAEFIX aktiv genutzt
       # - "DOMAIN_PRAEFIX_YES=yes"
-      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen), das unter https://ipv64.net/dyndns.php erstellt wurde. Gilt auch bei mehreren Domains ⚠️
+      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
-      # Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
-
+      # - "SHOUTRRR_URL="
 ```
 
 &nbsp;
@@ -126,18 +120,64 @@ services:
 
 ## Env Parameter
 
-| Name (Beschreibung)                                                                             | Wert               | Standard           | Beispiel                                     |
-| ----------------------------------------------------------------------------------------------- | ------------------ | ------------------ | -------------------------------------------- |
-| Zeitzone                                                                                        | TZ                 | Europe/Berlin      | Europe/Berlin                                |
-| Zeitliche Abfrage für die aktuelle IP                                                           | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
-| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                           | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
-| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns.php | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
-| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns.php | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
-| DEINE DOMAINS: z.b. deine-domain.ipv64.net, deine-domain.ipv64.de                               | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
-| DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                 | DOMAIN_PRAEFIX_YES | no                 | yes                                          |
-| DEIN DOMAIN PRAEFIX (subdomain) : ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                    | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
+| Name (Beschreibung)                                                                               | Wert               | Standard           | Beispiel                                     |
+| ------------------------------------------------------------------------------------------------- | ------------------ | ------------------ | -------------------------------------------- |
+| Zeitzone                                                                                          | TZ                 | Europe/Berlin      | Europe/Berlin                                |
+| Zeitliche Abfrage für die aktuelle IP                                                             | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
+| Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                             | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
+| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns.php   | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
+| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns.php   | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
+| DEINE DOMAINS: z.b. deine-domain.ipv64.net, deine-domain.ipv64.de                                 | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
+| DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                   | DOMAIN_PRAEFIX_YES | no                 | yes                                          |
+| DEIN DOMAIN PRAEFIX (subdomain) : ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                      | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
+| SHOUTRRR URL: Deine Shoutrrr URL als Benachrichtigungsdienst z.b ( gotify,discord,telegram,email) | SHOUTRRR_URL       | ------------------ | [Shoutrrr-Beispiele](#shoutrrr-beispiele)    |
 
 * * *
+
+&nbsp;
+
+## Shoutrrr Beispiele
+
+Die Nachricht wird fest vom Script erstellt. \
+Sie können den Betreff (titel) frei wählen wie im Beispiel genannt. \
+So könnte die Nachricht ausehen.
+
+```txt
+Betreff:   DDNS IPV64 IP UPDATE
+# Die Nachricht wird fest vom Script
+Nachricht: DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
+           DATUM  UPDATE !!! 
+           Update IP=IP - Alte-IP=IP
+           DOMAIN: DOMAIN
+
+----------------------------------------------------------
+Nachricht: DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
+           2022-12-27 14:40:59  UPDATE !!!
+           Update IP=1.0.0.1 - Alte-IP=1.1.1.1
+           DOMAIN: deine-domain.ipv64.net
+
+Nachricht: DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
+           2022-12-27 14:40:59  UPDATE !!!
+           Update IP=1.0.0.1 - Alte-IP=1.1.1.1
+           DOMAIN mit PRAEFIX: ddnd.deine-domain.ipv64.net
+```
+
+Das sind Beispiele für Shoutrrr als Benachrichtigungsdienst, für weitere Services infos fidetest du hier [Shoutrrr](https://containrrr.dev/shoutrrr/latest/services/overview/)
+
+| Service Name | URL Beispiel                                                                                      |
+| ------------ | ------------------------------------------------------------------------------------------------- |
+| gotify       | `gotify://<url domain.de>/<token>/?title=<title>&priority=<priority>`                             |
+| discord      | `discord://<token>@<webhook id>?title=<title>`                                                    |
+| telegram     | `telegram://<token>@telegram/?chats=<chad_id>&title=<title>`                                      |
+| smtp (email) | `smtp://<username>:<password>@<host>:<port>/?from=<sender_email>&to=<to_email>&subject=<subject>` |
+
+
+| Service Name | URL Beispiel (Beispiel text)                                                                                                  |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| gotify       | `gotify://domain.de/123456abc/?title=DDNS IPV64 IP UPDATE&priority=5`                                                         |
+| discord      | `discord://123456abc@555555555555555?title=DDNS IPV64 IP UPDATE`                                                              |
+| telegram     | `telegram://1111111111:123456abc@telegram/?chats=5555555555&title=DDNS IPV64 IP UPDATE`                                       |
+| smtp (email) | `smtp://noreply@domain.de:password@mail.domain.de:587/?from=noreply@domain.de&to=user@domain.de&subject=DDNS IPV64 IP UPDATE` |
 
 &nbsp;
 

@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alcapone1933/alpine:latest
 # ipv64.net 
 LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.created="$(date +%Y-%m-%d\ %H:%M)" \
@@ -17,9 +17,10 @@ ENV CURL_USER_AGENT="docker-ddns-ipv64/version=$VERSION github.com/alcapone1933/
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools jq && \
     rm -rf /var/cache/apk/*
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN mkdir -p /data /usr/local/bin/ /etc/cron.d/
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
+    mkdir -p /data /usr/local/bin/ /etc/cron.d/
 COPY data /data
+COPY --from=alcapone1933/shoutrrr:latest /usr/local/bin/shoutrrr /usr/local/bin/shoutrrr
 RUN mv /data/entrypoint.sh /usr/local/bin/entrypoint.sh && mv /data/cronjob /etc/cron.d/container_cronjob && mv /data/healthcheck.sh /usr/local/bin/healthcheck.sh  && \
     chmod 755 /data/ddns-update.sh && chmod 755 /data/ddns-update-praefix.sh && chmod 755 /usr/local/bin/entrypoint.sh && chmod 755 /usr/local/bin/healthcheck.sh && \
     chmod 755 /etc/cron.d/container_cronjob && touch /var/log/cron.log

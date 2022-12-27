@@ -11,12 +11,27 @@ UPDIP=$(cat $PFAD/updip.txt)
 
 sleep 1
 
+function SHOUTRRR_NOTIFY() {
+NOTIFY="
+DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
+\n
+`for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  UPDATE !!! \nUpdate IP=$IP - Alte-IP=$UPDIP  \nDOMAIN: ${DOMAIN} \n"; done`"
+
+/usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "${NOTIFY}"`" 2> /dev/null
+}
+
 if [ "$IP" == "$UPDIP" ]; then
     echo "$DATUM  KEIN UPDATE - Aktuelle IP=$UPDIP"
 else
     echo "$DATUM  UPDATE !!! ..."
     echo "$DATUM  UPDATE !!!  - Update IP=$IP - Alte-IP=$UPDIP"
     sleep 1
+    if [ -z "${SHOUTRRR_URL:-}" ] ; then
+        echo > /dev/null
+    else
+        echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
+        SHOUTRRR_NOTIFY
+    fi
     echo "$IP" > $PFAD/updip.txt
     # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
     UPDATE_IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
@@ -46,6 +61,13 @@ else
     echo "$DATUM  UPDATE !!!  - NACHEINTRAG DIE IP WIRD NOCH EINMAL GESETZT"
     echo "$DATUM  UPDATE !!!  - Update IP=$IP - Alte-IP=$UPDIP"
     sleep 5
+    if [ -z "${SHOUTRRR_URL:-}" ] ; then
+        echo > /dev/null
+    else
+        echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
+        SHOUTRRR_NOTIFY
+    fi
+    echo "$IP" > $PFAD/updip.txt
     # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
     UPDATE_IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
     # if [ "$UPDATE_IP" = "ok" ] ; then
