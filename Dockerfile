@@ -4,7 +4,7 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.created="$(date +%Y-%m-%d\ %H:%M)" \
       org.opencontainers.image.authors="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/ddns-ipv64" \
-      org.opencontainers.image.version="v0.0.9" \
+      org.opencontainers.image.version="v0.1.0" \
       org.opencontainers.image.ref.name="alcapone1933/ddns-ipv64" \
       org.opencontainers.image.title="DDNS Updater ipv64.net" \
       org.opencontainers.image.description="Community DDNS Updater fuer ipv64.net"
@@ -12,7 +12,7 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
 ENV TZ=Europe/Berlin
 ENV CRON_TIME="*/15 * * * *"
 ENV CRON_TIME_DIG="*/30 * * * *"
-ENV VERSION="v0.0.9"
+ENV VERSION="v0.1.0"
 ENV CURL_USER_AGENT="docker-ddns-ipv64/version=$VERSION github.com/alcapone1933/docker-ddns-ipv64"
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools jq && \
     rm -rf /var/cache/apk/*
