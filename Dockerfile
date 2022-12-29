@@ -21,9 +21,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
     mkdir -p /data /usr/local/bin/ /etc/cron.d/
 COPY data /data
 COPY --from=alcapone1933/shoutrrr:latest /usr/local/bin/shoutrrr /usr/local/bin/shoutrrr
-RUN mv /data/entrypoint.sh /usr/local/bin/entrypoint.sh && mv /data/cronjob /etc/cron.d/container_cronjob && mv /data/healthcheck.sh /usr/local/bin/healthcheck.sh  && \
-    chmod 755 /data/ddns-update.sh && chmod 755 /data/ddns-update-praefix.sh && chmod 755 /usr/local/bin/entrypoint.sh && chmod 755 /usr/local/bin/healthcheck.sh && \
-    chmod 755 /etc/cron.d/container_cronjob && touch /var/log/cron.log
+RUN cd /data && chmod +x *.sh && mv /data/entrypoint.sh /usr/local/bin/entrypoint.sh && \
+    mv /data/cronjob /etc/cron.d/container_cronjob && mv /data/healthcheck.sh /usr/local/bin/healthcheck.sh && touch /var/log/cron.log
 # VOLUME [ "/data" ]
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
