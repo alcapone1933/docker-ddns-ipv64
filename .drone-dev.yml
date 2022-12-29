@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: BUILD-TEST-dev
+name: BUILD-TEST-DEV
 steps:
   - name: Build Multi-arch
     image: alcapone1933/drone:docker-buildx
@@ -23,7 +23,7 @@ trigger:
 ---
 kind: pipeline
 type: docker
-name: BUILD-Dockerhub-dev
+name: BUILD-Dockerhub-DEV
 steps:
   - name: Build Multi-arch
     image: alcapone1933/drone:docker-buildx
