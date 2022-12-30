@@ -2,7 +2,7 @@
 PFAD="/data"
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 set -e
-if ! curl -sSL --user-agent "${CURL_USER_AGENT}" --fail "https://ipv64.net" 2>&1 > /dev/null; then
+if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
     echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
     exit 1
 fi
@@ -15,16 +15,21 @@ if [ "${STATUS}" = "FAIL" ] ; then
 fi
 
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
-IP=$(curl -4ssL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
+IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
 UPDIP=$(cat $PFAD/updip.txt)
 
 function SHOUTRRR_NOTIFY() {
+echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
 NOTIFY="
 DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
 \n
 `for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  UPDATE !!! \nUpdate IP=$IP - Alte-IP=$UPDIP  \nDOMAIN: ${DOMAIN} \n"; done`"
 
-/usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "${NOTIFY}"`" 2> /dev/null
+if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "${NOTIFY}"`" 2> /dev/null; then
+    echo "$DATUM  FEHLER !!!  - NACHRICHT konnte nicht gesendet werden"
+else
+    echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
+fi
 }
 
 if [ "$IP" == "$UPDIP" ]; then
@@ -36,7 +41,6 @@ else
     if [ -z "${SHOUTRRR_URL:-}" ] ; then
         echo > /dev/null
     else
-        echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
         SHOUTRRR_NOTIFY
     fi
     echo "$IP" > $PFAD/updip.txt
@@ -46,7 +50,16 @@ else
     if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP AN IPV64.NET GESENDET"
     else
-        echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP NICHT GESENTET"
+        echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"
+        if [ -z "${SHOUTRRR_URL:-}" ] ; then
+             echo > /dev/null
+        else
+            echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
+            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  FEHLER !!! \nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"`" 2> /dev/null; then
+                echo "$DATUM  FEHLER !!!  - NACHRICHT konnte nicht gesendet werden"
+            else
+                echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
+            fi
     fi
     # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
 fi
@@ -56,7 +69,7 @@ function CHECK_A_DOMAIN() {
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 UPDIP=$(cat $PFAD/updip.txt)
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
-IP=$(curl -4ssL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
+IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
 # DOMAIN_CHECK=$(dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net)
 DOMAIN_CHECK=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do dig +short ${DOMAIN} A @ns1.ipv64.net; done | tail -n 1)
 sleep 1
@@ -71,7 +84,6 @@ else
     if [ -z "${SHOUTRRR_URL:-}" ] ; then
         echo > /dev/null
     else
-        echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
         SHOUTRRR_NOTIFY
     fi
     echo "$IP" > $PFAD/updip.txt
@@ -81,7 +93,16 @@ else
     if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP AN IPV64.NET GESENDET"
     else
-        echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP NICHT GESENTET"
+        echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"
+        if [ -z "${SHOUTRRR_URL:-}" ] ; then
+             echo > /dev/null
+        else
+            echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
+            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  FEHLER !!! \nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"`" 2> /dev/null; then
+                echo "$DATUM  FEHLER !!!  - NACHRICHT konnte nicht gesendet werden"
+            else
+                echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
+            fi
     fi
     # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
     sleep 15
