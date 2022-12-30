@@ -9,11 +9,13 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.title="DDNS Updater ipv64.net" \
       org.opencontainers.image.description="Community DDNS Updater fuer ipv64.net"
 
-ENV TZ=Europe/Berlin
-ENV CRON_TIME="*/15 * * * *"
-ENV CRON_TIME_DIG="*/30 * * * *"
-ENV VERSION="v0.1.0"
-ENV CURL_USER_AGENT="docker-ddns-ipv64/version=$VERSION github.com/alcapone1933/docker-ddns-ipv64"
+ENV TZ=Europe/Berlin \
+    CRON_TIME="*/15 * * * *" \
+    CRON_TIME_DIG="*/30 * * * *" \
+    VERSION="v0.1.0" \
+    CURL_USER_AGENT="docker-ddns-ipv64/version=$VERSION github.com/alcapone1933/docker-ddns-ipv64" \
+    SHOUTRRR_URL=""
+
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools jq && \
     rm -rf /var/cache/apk/*
 
