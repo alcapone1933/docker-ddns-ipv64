@@ -7,7 +7,7 @@ steps:
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       repo: alcapone1933/ddns-ipv64
       tags: latest
       dry_run: true
@@ -33,11 +33,11 @@ steps:
         from_secret: DOCKER_USER
       password: 
         from_secret: DOCKER_PASS    
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       repo: alcapone1933/ddns-ipv64
       # tags: latest
       auto_tag: true
-      auto_tag_suffix: v0.0.9
+      auto_tag_suffix: v0.1.0
 
 trigger:
   branch:
@@ -53,37 +53,6 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: BUILD-GitHub-Version
-steps:
-  - name: Build Multi-arch
-    image: alcapone1933/drone:docker-buildx
-    privileged: true
-    settings:
-      username: 
-        from_secret: GITHUB_USER
-      password: 
-        from_secret: GITHUB_PASS
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
-      registry: ghcr.io
-      repo: ghcr.io/alcapone1933/ddns-ipv64
-      # tags: latest
-      auto_tag: true
-      auto_tag_suffix: v0.0.9
-
-trigger:
-  branch:
-  - master
-  event:
-  - custom
-  # - push
-  # - pull_request
-
-depends_on:
-  - BUILD-Dockerhub-Version
-
----
-kind: pipeline
-type: docker
 name: BUILD-Dockerhub-Latest
 steps:
   - name: Build Multi-arch
@@ -94,7 +63,7 @@ steps:
         from_secret: DOCKER_USER
       password: 
         from_secret: DOCKER_PASS    
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
       repo: alcapone1933/ddns-ipv64
       # tags: latest
       auto_tag: true
@@ -108,34 +77,55 @@ trigger:
   # - pull_request
 
 depends_on:
-  - BUILD-GitHub-Version
+  - BUILD-Dockerhub-Version
+---
+kind: pipeline
+type: docker
+name: BUILD-TEST-DEV
+steps:
+  - name: Build Multi-arch
+    image: alcapone1933/drone:docker-buildx
+    privileged: true
+    settings:
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+      repo: alcapone1933/ddns-ipv64
+      tags: dev
+      dry_run: true
+
+trigger:
+  branch:
+  - development
+  event:
+  - custom
+  # - push
+  # - pull_request
 
 ---
 kind: pipeline
 type: docker
-name: BUILD-GitHub-Latest
+name: BUILD-Dockerhub-DEV
 steps:
   - name: Build Multi-arch
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
       username: 
-        from_secret: GITHUB_USER
+        from_secret: DOCKER_USER
       password: 
-        from_secret: GITHUB_PASS
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
-      registry: ghcr.io
-      repo: ghcr.io/alcapone1933/ddns-ipv64
-      # tags: latest
-      auto_tag: true
+        from_secret: DOCKER_PASS    
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+      repo: alcapone1933/ddns-ipv64
+      tags: dev
+      # auto_tag: true
+      # auto_tag_suffix: dev
 
 trigger:
   branch:
-  - master
+  - development
   event:
   - custom
   # - push
   # - pull_request
 
 depends_on:
-  - BUILD-Dockerhub-Latest
+  - BUILD-TEST-DEV

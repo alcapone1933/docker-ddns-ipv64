@@ -1,39 +1,14 @@
 #!/usr/bin/env bash
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 set -e
-if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
-    if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
-        echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei Domain"
-        exit 1
-    else
-        echo "$DATUM  PRAEFIX     - Sie haben ein DOMAIN PRAEFIX gesetzt"
-    fi
-    if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei Domain"
-        exit 1
-    else
-        echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
-        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  DOMAIN      - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN}"; done
-    fi
-else
-    if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei Domain"
-        exit 1
-    else
-        echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
-        # echo "$DATUM  DOMAIN      - Deine DOMAIN $DOMAIN_IPV64"
-        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  DOMAIN      - Deine DOMAIN ${DOMAIN}"; done
-    fi
-fi
-
-if [ -z "${DOMAIN_KEY:-}" ] ; then
-    echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schauen die unter https://ipv64.net/dyndns.php nach bei  DynDNS Updatehash"
-    exit 1
-else
-    echo "$DATUM  DOMAIN KEY  - Sie haben einen DOMAIN Key gesetzt"
-fi
-
-if ! curl -sSL --user-agent "${CURL_USER_AGENT}" --fail https://ipv64.net/ > /dev/null; then
+if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
     echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
-    exit 0
+    exit 1
+fi
+STATUS="OK"
+NAMESERVER_CHECK=$(dig +timeout=1 @ns1.ipv64.net 2> /dev/null)
+echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
+if [ "${STATUS}" = "FAIL" ] ; then
+    echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
+    exit 1
 fi

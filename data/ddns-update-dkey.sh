@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
-if ! curl -sSL --user-agent "${CURL_USER_AGENT}" --fail "https://ipv64.net" > /dev/null; then
+if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
     echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
-	exit 0
+    exit 1
 fi
 PFAD="/data"
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
