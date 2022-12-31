@@ -26,7 +26,8 @@ if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev
                 echo > /dev/null
             else
                 echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
-                if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \nIPV64.NET IST NICHT ERREICHBAR \nIHRE Aktuelle IP laut IPINFO.IO=$IP_INFO"`" 2> /dev/null; then
+                DOMAIN_NOTIFY=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "DOMAIN: ${DOMAIN} "; done)
+                if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nIPV64.NET IST NICHT ERREICHBAR \nIHRE Aktuelle IP laut IPINFO.IO=$IP_INFO \n${DOMAIN_NOTIFY}"`" 2> /dev/null; then
                     echo "$DATUM  FEHLER !!!  - SHOUTRRR NACHRICHT konnte nicht gesendet werden"
                 else
                     echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
@@ -86,7 +87,8 @@ else
              echo > /dev/null
         else
             echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
-            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  FEHLER !!! \nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"`" 2> /dev/null; then
+            DOMAIN_NOTIFY=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "DOMAIN: ${DOMAIN} "; done)
+            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET \n${DOMAIN_NOTIFY}"`" 2> /dev/null; then
                 echo "$DATUM  FEHLER !!!  - NACHRICHT konnte nicht gesendet werden"
             else
                 echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
@@ -140,7 +142,8 @@ else
              echo > /dev/null
         else
             echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
-            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"`" 2> /dev/null; then
+            DOMAIN_NOTIFY=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "DOMAIN: ${DOMAIN} "; done)
+            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET \n${DOMAIN_NOTIFY}"`" 2> /dev/null; then
                 echo "$DATUM  FEHLER !!!  - SHOUTRRR NACHRICHT konnte nicht gesendet werden"
             else
                 echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
