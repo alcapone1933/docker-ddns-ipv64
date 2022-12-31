@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 PFAD="/data"
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
-set -e
+# set -e
 if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
     echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
+    echo "=============================================================================================="
     exit 1
 fi
 STATUS="OK"
@@ -11,6 +12,7 @@ NAMESERVER_CHECK=$(dig +timeout=1 @ns1.ipv64.net 2> /dev/null)
 echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
 if [ "${STATUS}" = "FAIL" ] ; then
     echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
+    echo "=============================================================================================="
     exit 1
 fi
 
@@ -38,19 +40,24 @@ else
     echo "$DATUM  UPDATE !!! ..."
     echo "$DATUM  UPDATE !!!  - Update IP=$IP - Alte-IP=$UPDIP"
     sleep 1
-    if [ -z "${SHOUTRRR_URL:-}" ] ; then
-        echo > /dev/null
-    else
-        SHOUTRRR_NOTIFY
-    fi
-    echo "$IP" > $PFAD/updip.txt
     # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
     UPDATE_IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
     # if [ "$UPDATE_IP" = "ok" ] ; then
     if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP WURDE AN IPV64.NET GESENDET"
+        if [ -z "${SHOUTRRR_URL:-}" ] ; then
+            echo > /dev/null
+        else
+            SHOUTRRR_NOTIFY
+        fi
+        echo "$IP" > $PFAD/updip.txt
     else
         echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"
+        CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}" | grep -o "Updateintervall")
+        if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
+            echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
+            echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+        fi
         if [ -z "${SHOUTRRR_URL:-}" ] ; then
              echo > /dev/null
         else
@@ -64,6 +71,7 @@ else
     fi
     # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
 fi
+echo "=============================================================================================="
 sleep 5
 # Nachpruefung ob der DOMAIN Eintrag richtig gesetzt ist
 function CHECK_A_DOMAIN() {
@@ -82,19 +90,28 @@ else
     echo "$DATUM  UPDATE !!!  - NACHEINTRAG DIE IP WIRD NOCH EINMAL GESETZT"
     echo "$DATUM  UPDATE !!!  - Update IP=$IP - Alte-IP=$UPDIP"
     sleep 5
-    if [ -z "${SHOUTRRR_URL:-}" ] ; then
-        echo > /dev/null
-    else
-        SHOUTRRR_NOTIFY
-    fi
-    echo "$IP" > $PFAD/updip.txt
     # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
     UPDATE_IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
     # if [ "$UPDATE_IP" = "ok" ] ; then
     if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP WURDE AN IPV64.NET GESENDET"
+        if [ -z "${SHOUTRRR_URL:-}" ] ; then
+            echo > /dev/null
+        else
+            SHOUTRRR_NOTIFY
+        fi
+        echo "$IP" > $PFAD/updip.txt
+        # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
+        sleep 15
+        # echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
+        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN} A @ns1.ipv64.net`"; done
     else
         echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"
+        CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}" | grep -o "Updateintervall")
+        if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
+            echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
+            echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+        fi
         if [ -z "${SHOUTRRR_URL:-}" ] ; then
              echo > /dev/null
         else
@@ -106,10 +123,7 @@ else
             fi
         fi
     fi
-    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
-    sleep 15
-    # echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
-    for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN} A @ns1.ipv64.net`"; done
 fi
 }
 CHECK_A_DOMAIN
+echo "=============================================================================================="
