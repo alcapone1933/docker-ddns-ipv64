@@ -74,18 +74,27 @@ if [ -z "${CRON_TIME_DIG:-}" ] ; then
     exit 1
 fi
 
-if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
-    echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
-    exit 1
-fi
-
-STATUS="OK"
-NAMESERVER_CHECK=$(dig +timeout=1 @ns1.ipv64.net 2> /dev/null)
-echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
-if [ "${STATUS}" = "FAIL" ] ; then
-    echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
-    exit 1
-fi
+while true; do
+    if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
+        echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
+        sleep 900
+        echo "=============================================================================================="
+    else
+        break
+    fi
+done
+while true; do
+    STATUS="OK"
+    NAMESERVER_CHECK=$(dig +timeout=1 @ns1.ipv64.net 2> /dev/null)
+    echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
+    if [ "${STATUS}" = "FAIL" ] ; then
+        echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ns1.ipv64.net ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
+        sleep 900
+        echo "=============================================================================================="
+    else
+        break
+    fi
+done
 
 if [ -z "${SHOUTRRR_URL:-}" ] ; then
     echo "$DATUM  SHOUTRRR    - Sie haben keine SHOUTRRR URL gesetzt"
