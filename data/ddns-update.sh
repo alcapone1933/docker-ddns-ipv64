@@ -11,7 +11,7 @@ if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev
         echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ns1.ipv64.net ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
         echo "=============================================================================================="
     fi
-    if ! curl -4sf "https://google.net" 2>&1 > /dev/null; then
+    if ! curl -4sf "https://google.de" 2>&1 > /dev/null; then
         echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite google.de ist nicht erreichbar"
         echo "=============================================================================================="
         exit 1
