@@ -35,13 +35,13 @@ echo "==========================================================================
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
         echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
-        exit 1
+        sleep infinity
     else
         echo "$DATUM  PRAEFIX     - Sie haben ein DOMAIN PRAEFIX gesetzt"
     fi
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
         echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
-        exit 1
+        sleep infinity
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
         for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  DOMAIN      - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN}"; done
@@ -49,7 +49,7 @@ if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
 else
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
         echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
-        exit 1
+        sleep infinity
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
         # echo "$DATUM  DOMAIN      - Deine DOMAIN $DOMAIN_IPV64"
@@ -59,19 +59,19 @@ fi
 
 if [ -z "${DOMAIN_KEY:-}" ] ; then
     echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei DynDNS Updatehash"
-    exit 1
+    sleep infinity
 else
     echo "$DATUM  DOMAIN KEY  - Sie haben einen DOMAIN Key gesetzt"
 fi
 
 if [ -z "${CRON_TIME:-}" ] ; then
     echo "$DATUM  FEHLER !!!  - Sie haben die Environment CRON_TIME nicht gesetzt"
-    exit 1
+    sleep infinity
 fi
 
 if [ -z "${CRON_TIME_DIG:-}" ] ; then
     echo "$DATUM  FEHLER !!!  - Sie haben die Environment CRON_TIME_DIG nicht gesetzt"
-    exit 1
+    sleep infinity
 fi
 
 while true; do
