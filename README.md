@@ -144,7 +144,7 @@ So könnte die Nachricht ausehen.
 
 ```txt
 Betreff:   DDNS IPV64 IP UPDATE
-# Die Nachricht wird fest vom Script
+# Die Nachricht wird fest vom Script erstellt.
 Nachricht: DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
            DATUM  UPDATE !!! 
            Update IP=IP - Alte-IP=IP
