@@ -181,6 +181,42 @@ Das sind Beispiele für Shoutrrr als Benachrichtigungsdienst, für weitere Servi
 
 &nbsp;
 
+### Du kannst die Shoutrrr URL auch generieren lassen
+
+```bash
+# $ docker run --rm -it alcapone1933/shoutrrr generate
+#Error: no service specified
+#Usage:
+#  shoutrrr generate [flags]
+#
+#Flags:
+#  -g, --generator string       The generator to use (default "basic")
+#  -h, --help                   help for generate
+#  -p, --property stringArray   Configuration property in key=value format
+#  -s, --service string         The notification service to generate a URL for
+#
+#Available services:
+#  opsgenie, slack, teams, generic, googlechat, join, bark, logger, matrix, discord, mattermost, rocketchat, pushbullet, pushover, smtp, telegram, zulip, gotify, hangouts, ifttt
+
+# docker run --rm -it alcapone1933/shoutrrr generate gotify
+
+docker run --rm -it alcapone1933/shoutrrr generate
+
+# TEST
+# $ docker run --rm -it alcapone1933/shoutrrr send --verbose --url "< Shoutrrr URL >" --message "DOCKER DDNS UPDATER IPV64.NET"
+
+docker run --rm -it alcapone1933/shoutrrr send --verbose --url "< Shoutrrr URL >" --message "DOCKER DDNS UPDATER IPV64.NET"
+```
+
+<details>
+<summary markdown="span">DEMO Shoutrrr URL generieren</summary>
+
+<img src="demo/shoutrrr-demo.gif" width="1200" height="800">
+
+</details>
+
+&nbsp;
+
 ## DEMO
 
 <img src="demo/demo.gif" width="700" height="400">
