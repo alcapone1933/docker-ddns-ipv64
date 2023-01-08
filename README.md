@@ -211,7 +211,7 @@ docker run --rm -it alcapone1933/shoutrrr send --verbose --url "< Shoutrrr URL >
 <details>
 <summary markdown="span">DEMO Shoutrrr URL generieren</summary>
 
-<img src="demo/shoutrrr-demo.gif" width="1200" height="800">
+<img src="demo/shoutrrr-demo.gif" width="1050" height="800">
 
 </details>
 
