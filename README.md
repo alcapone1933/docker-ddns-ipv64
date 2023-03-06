@@ -174,10 +174,10 @@ Das sind Beispiele für Shoutrrr als Benachrichtigungsdienst, für weitere Servi
 
 | Service Name | URL Beispiel (Beispiel text)                                                                                                  |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| gotify       | `gotify://domain.de/123456abc/?title=DDNS IPV64 IP UPDATE&priority=5`                                                         |
-| discord      | `discord://123456abc@555555555555555?title=DDNS IPV64 IP UPDATE`                                                              |
-| telegram     | `telegram://1111111111:123456abc@telegram/?chats=5555555555&title=DDNS IPV64 IP UPDATE`                                       |
-| smtp (email) | `smtp://noreply@domain.de:password@mail.domain.de:587/?from=noreply@domain.de&to=user@domain.de&subject=DDNS IPV64 IP UPDATE` |
+| gotify       | `gotify://domain.de/123456abc/?title=DDNS+IPV64+IP+UPDATE&priority=5`                                                         |
+| discord      | `discord://123456abc@555555555555555?title=DDNS+IPV64+IP+UPDATE`                                                              |
+| telegram     | `telegram://1111111111:123456abc@telegram/?chats=5555555555&title=DDNS+IPV64+IP UPDATE`                                       |
+| smtp (email) | `smtp://noreply@domain.de:password@mail.domain.de:587/?from=noreply@domain.de&to=user@domain.de&subject=DDNS+IPV64+IP+UPDATE` |
 
 &nbsp;
 
