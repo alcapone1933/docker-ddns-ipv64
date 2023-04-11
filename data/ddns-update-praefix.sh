@@ -151,5 +151,11 @@ else
     fi
 fi
 }
-CHECK_A_DOMAIN
+
+if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
+    CHECK_A_DOMAIN
+else
+    echo > /dev/null
+fi
+
 echo "=============================================================================================="
