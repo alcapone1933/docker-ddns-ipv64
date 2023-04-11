@@ -37,7 +37,7 @@ steps:
       repo: alcapone1933/ddns-ipv64
       # tags: latest
       auto_tag: true
-      auto_tag_suffix: v0.1.1
+      auto_tag_suffix: v0.1.2
 
 trigger:
   branch:
