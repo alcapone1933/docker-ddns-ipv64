@@ -38,10 +38,10 @@ UPDIP=$(cat $PFAD/updip.txt)
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
 # IP=$(curl -4ssL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
 IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4")
-DOMAIN_CHECK=$(dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net)
+DOMAIN_CHECK=$(dig +short ${DOMAIN_IPV64} A @${NAME_SERVER})
 sleep 1
 if [ "$IP" == "$DOMAIN_CHECK" ]; then
-    echo "$DATUM  CHECK       - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
+    echo "$DATUM  CHECK       - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_IPV64} A @${NAME_SERVER}`"
 else
     echo "$DATUM  UPDATE !!! ..."
     echo "$DATUM  UPDATE !!!  - NACHEINTRAG DIE IP WIRD NOCH EINMAL GESETZT"
@@ -57,7 +57,7 @@ else
     fi
     # curl -4sSL https://ipv64.net/update.php?dkey=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
     sleep 15
-    echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_IPV64} A @ns1.ipv64.net`"
+    echo "$DATUM  NACHEINTRAG - DOMAIN HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_IPV64} A @${NAME_SERVER}`"
 fi
 }
 CHECK_A_DOMAIN

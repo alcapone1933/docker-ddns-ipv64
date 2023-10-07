@@ -15,7 +15,8 @@ ENV TZ=Europe/Berlin \
     VERSION="v0.1.3" \
     CURL_USER_AGENT="docker-ddns-ipv64/version=v0.1.3 github.com/alcapone1933/docker-ddns-ipv64" \
     SHOUTRRR_URL="" \
-    IP_CHECK="Yes"
+    IP_CHECK="Yes" \
+    NAME_SERVER="ns1.ipv64.net"
 
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools jq && \
     rm -rf /var/cache/apk/*

@@ -86,10 +86,10 @@ while true; do
 done
 while true; do
     STATUS="OK"
-    NAMESERVER_CHECK=$(dig +timeout=1 @ns1.ipv64.net 2> /dev/null)
+    NAMESERVER_CHECK=$(dig +timeout=1 @${NAME_SERVER} 2> /dev/null)
     echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
     if [ "${STATUS}" = "FAIL" ] ; then
-        echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ns1.ipv64.net ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
+        echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ${NAME_SERVER} ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
         sleep 900
         echo "=============================================================================================="
     else
@@ -123,7 +123,7 @@ if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
     echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
     sleep 5
     if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @ns1.ipv64.net`"; done
+        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`"; done
     else
         echo > /dev/null
     fi
@@ -148,8 +148,8 @@ if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
 else
     echo > /dev/null
 fi
-# echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
-# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
+# echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @${NAME_SERVER}`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
+# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`" >> /var/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
 }
 
 function Domain_mit_praefix() {
@@ -158,7 +158,7 @@ if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
     echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
     sleep 5
     if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net`"; done
+        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`"; done
     else
         echo > /dev/null
     fi
@@ -183,7 +183,7 @@ if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
 else
     echo > /dev/null
 fi
-# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net`" >> /var/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
+# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`" >> /var/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
 }
 
 if [[ "$DOMAIN_PRAEFIX_YES" =~ (YES|yes|Yes) ]] ; then

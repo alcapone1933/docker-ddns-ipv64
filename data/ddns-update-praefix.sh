@@ -6,10 +6,10 @@ DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php" 2>&1 > /dev/null; then
     echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
     STATUS="OK"
-    NAMESERVER_CHECK=$(dig +timeout=1 @ns1.ipv64.net 2> /dev/null)
+    NAMESERVER_CHECK=$(dig +timeout=1 @${NAME_SERVER} 2> /dev/null)
     echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
     if [ "${STATUS}" = "FAIL" ] ; then
-        echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ns1.ipv64.net ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
+        echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ${NAME_SERVER} ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
         echo "=============================================================================================="
     fi
     if ! curl -4sf "https://google.de" 2>&1 > /dev/null; then
@@ -107,12 +107,12 @@ UPDIP=$(cat $PFAD/updip.txt)
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
 # IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
 IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4")
-# DOMAIN_CHECK=$(dig +short ${DOMAIN_IPV64} A @ns1.ipv64.net)
-DOMAIN_CHECK=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net; done | tail -n 1)
+# DOMAIN_CHECK=$(dig +short ${DOMAIN_IPV64} A @${NAME_SERVER})
+DOMAIN_CHECK=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}; done | tail -n 1)
 sleep 1
 if [ "$IP" == "$DOMAIN_CHECK" ]; then
-    # echo "$DATUM  CHECK       - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`"
-    for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  CHECK       - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net`"; done
+    # echo "$DATUM  CHECK       - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @${NAME_SERVER}`"
+    for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  CHECK       - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`"; done
 else
     echo "$DATUM  UPDATE !!! ..."
     echo "$DATUM  UPDATE !!!  - NACHEINTRAG DIE IP WIRD NOCH EINMAL GESETZT"
@@ -131,8 +131,8 @@ else
         echo "$IP" > $PFAD/updip.txt
         # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=<ipaddr>&ip6=<ip6addr>&output=min
         sleep 15
-        # echo "$DATUM  NACHEINTRAG - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @ns1.ipv64.net`"
-        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  NACHEINTRAG - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN} A @ns1.ipv64.net`"; done
+        # echo "$DATUM  NACHEINTRAG - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN_IPV64} A @${NAME_SERVER}`"
+        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  NACHEINTRAG - DOMAIN mit PRAEFIX HAT DEN A-RECORD=`dig +noall +answer ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`"; done
     else
         echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"
         CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}" | grep -o "Updateintervall")

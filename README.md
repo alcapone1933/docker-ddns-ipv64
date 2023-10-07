@@ -81,6 +81,7 @@ docker run -d \
     "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
     -e "DOMAIN_PRAEFIX=ddns" \
     -e "SHOUTRRR_URL=" \
+    -e "NAME_SERVER=ns1.ipv64.net" \
 ```
 
 ## Docker Compose
@@ -103,6 +104,7 @@ services:
       # - "DOMAIN_PRAEFIX=ddns"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
       # - "SHOUTRRR_URL="
+      # - "NAME_SERVER=ns1.ipv64.net"
 ```
 
 &nbsp;
@@ -132,6 +134,7 @@ services:
 | DEIN DOMAIN PRAEFIX (subdomain) : ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                      | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
 | IP CHECK: Die IP Adresse der Domain wird überprüft                                                | IP_CHECK           | Yes                | Yes                                          |
 | SHOUTRRR URL: Deine Shoutrrr URL als Benachrichtigungsdienst z.b ( gotify,discord,telegram,email) | SHOUTRRR_URL       | ------------------ | [Shoutrrr-Beispiele](#shoutrrr-beispiele)    |
+| NAME_SERVER: : Der Nameserver, um die IP-Adresse Ihrer Domain zu überprüfen.                      | NAME_SERVER        | ns1.ipv64.net      | ns1.ipv64.net                                |
 
 * * *
 
