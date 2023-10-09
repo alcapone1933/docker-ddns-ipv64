@@ -4,7 +4,7 @@ services:
     # build:
       # dockerfile: ./Dockerfile
     image: alcapone1933/ddns-ipv64:latest
-    # image: alcapone1933/ddns-ipv64:v0.1.2
+    # image: alcapone1933/ddns-ipv64:v0.1.3
     container_name: ddns-ipv64
     restart: always
     # volumes:
@@ -21,6 +21,7 @@ services:
       # - "IP_CHECK=Yes"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
       # - "SHOUTRRR_URL="
+      # - "NAME_SERVER=ns1.ipv64.net"
 # volumes:
   # data:
     # name: ddns-ipv64_data
