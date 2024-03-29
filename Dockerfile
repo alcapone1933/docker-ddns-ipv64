@@ -4,7 +4,7 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.created="$(date +%Y-%m-%d\ %H:%M)" \
       org.opencontainers.image.authors="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/ddns-ipv64" \
-      org.opencontainers.image.version="v0.1.3" \
+      org.opencontainers.image.version="v0.1.4" \
       org.opencontainers.image.ref.name="alcapone1933/ddns-ipv64" \
       org.opencontainers.image.title="DDNS Updater ipv64.net" \
       org.opencontainers.image.description="Community DDNS Updater fuer ipv64.net"
@@ -12,8 +12,8 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
 ENV TZ=Europe/Berlin \
     CRON_TIME="*/15 * * * *" \
     CRON_TIME_DIG="*/30 * * * *" \
-    VERSION="v0.1.3" \
-    CURL_USER_AGENT="docker-ddns-ipv64/version=v0.1.3 github.com/alcapone1933/docker-ddns-ipv64" \
+    VERSION="v0.1.4" \
+    CURL_USER_AGENT="docker-ddns-ipv64/version=v0.1.4 github.com/alcapone1933/docker-ddns-ipv64" \
     SHOUTRRR_URL="" \
     SHOUTRRR_SKIP_TEST="no" \
     IP_CHECK="yes" \
