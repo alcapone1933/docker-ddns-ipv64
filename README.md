@@ -81,7 +81,9 @@ docker run -d \
     "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
     -e "DOMAIN_PRAEFIX=ddns" \
     -e "SHOUTRRR_URL=" \
+    -e "SHOUTRRR_SKIP_TEST=no" \
     -e "NAME_SERVER=ns1.ipv64.net" \
+
 ```
 
 ## Docker Compose
@@ -104,6 +106,7 @@ services:
       # - "DOMAIN_PRAEFIX=ddns"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
       # - "SHOUTRRR_URL="
+      # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
 ```
 
@@ -130,11 +133,12 @@ services:
 | DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns.php   | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
 | DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns.php   | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
 | DEINE DOMAINS: z.b. deine-domain.ipv64.net, deine-domain.ipv64.de                                 | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
-| DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                   | DOMAIN_PRAEFIX_YES | no                 | yes                                          |
+| DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                   | DOMAIN_PRAEFIX_YES | no                 | yes    (yes oder no)                         |
 | DEIN DOMAIN PRAEFIX (subdomain) : ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                      | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
-| IP CHECK: Die IP Adresse der Domain wird überprüft                                                | IP_CHECK           | Yes                | Yes                                          |
+| IP CHECK: Die IP-Adresse der Domain wird überprüft                                                | IP_CHECK           | yes                | yes    (yes oder no)                         |
 | SHOUTRRR URL: Deine Shoutrrr URL als Benachrichtigungsdienst z.b ( gotify,discord,telegram,email) | SHOUTRRR_URL       | ------------------ | [Shoutrrr-Beispiele](#shoutrrr-beispiele)    |
-| NAME_SERVER: : Der Nameserver, um die IP-Adresse Ihrer Domain zu überprüfen.                      | NAME_SERVER        | ns1.ipv64.net      | ns1.ipv64.net                                |
+| SHOUTRRR_SKIP_TEST: Beim Start des Containers wird keine Testnachricht gesendet                   | SHOUTRRR_SKIP_TEST | no                 | no     (yes oder no)                         |
+| NAME_SERVER: : Der Nameserver, um die IP-Adresse Ihrer Domain zu überprüfen                       | NAME_SERVER        | ns1.ipv64.net      | ns1.ipv64.net                                |
 
 * * *
 

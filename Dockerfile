@@ -4,7 +4,7 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.created="$(date +%Y-%m-%d\ %H:%M)" \
       org.opencontainers.image.authors="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
       org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/ddns-ipv64" \
-      org.opencontainers.image.version="v0.1.3" \
+      org.opencontainers.image.version="v0.1.4" \
       org.opencontainers.image.ref.name="alcapone1933/ddns-ipv64" \
       org.opencontainers.image.title="DDNS Updater ipv64.net" \
       org.opencontainers.image.description="Community DDNS Updater fuer ipv64.net"
@@ -12,10 +12,11 @@ LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
 ENV TZ=Europe/Berlin \
     CRON_TIME="*/15 * * * *" \
     CRON_TIME_DIG="*/30 * * * *" \
-    VERSION="v0.1.3" \
-    CURL_USER_AGENT="docker-ddns-ipv64/version=v0.1.3 github.com/alcapone1933/docker-ddns-ipv64" \
+    VERSION="v0.1.4" \
+    CURL_USER_AGENT="docker-ddns-ipv64/version=v0.1.4 github.com/alcapone1933/docker-ddns-ipv64" \
     SHOUTRRR_URL="" \
-    IP_CHECK="Yes" \
+    SHOUTRRR_SKIP_TEST="no" \
+    IP_CHECK="yes" \
     NAME_SERVER="ns1.ipv64.net"
 
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools jq && \
@@ -28,7 +29,7 @@ COPY --from=alcapone1933/shoutrrr:latest /usr/local/bin/shoutrrr /usr/local/bin/
 RUN cd /data && chmod +x *.sh && mv /data/entrypoint.sh /usr/local/bin/entrypoint.sh && \
     mv /data/cronjob /etc/cron.d/container_cronjob && mv /data/healthcheck.sh /usr/local/bin/healthcheck.sh && touch /var/log/cron.log && ln -s /var/log/cron.log /data/cron.log
 # VOLUME [ "/data" ]
-
+WORKDIR /data
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 # HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=3 CMD curl -sSL --user-agent "${CURL_USER_AGENT}" --fail "https://ipv64.net" > /dev/null || exit 1
 # HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=2 CMD /usr/local/bin/healthcheck.sh
