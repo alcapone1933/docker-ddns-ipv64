@@ -21,6 +21,7 @@ services:
       # - "IP_CHECK=Yes"
       - "DOMAIN_KEY=1234567890abcdefghijklmn"
       # - "SHOUTRRR_URL="
+      # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
 # volumes:
   # data:

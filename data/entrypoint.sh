@@ -101,14 +101,19 @@ if [ -z "${SHOUTRRR_URL:-}" ] ; then
     echo "$DATUM  SHOUTRRR    - Sie haben keine SHOUTRRR URL gesetzt"
 else
     echo "$DATUM  SHOUTRRR    - Sie haben eine  SHOUTRRR URL gesetzt"
-    if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  TEST !!! \nDDNS Updater in Docker fuer Free DynDNS IPv64.net"`" 2> /dev/null; then
-        echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: SHOUTRRR URL"
-        echo "$DATUM    INFO !!!  - Schaue unter https://containrrr.dev/shoutrrr/ nach dem richtigen URL Format"
-        echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
-        sleep infinity
+    if [[ "${SHOUTRRR_SKIP_TEST}" =~ (NO|no|No) ]] ; then
+        if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  TEST !!! \nDDNS Updater in Docker fuer Free DynDNS IPv64.net"`" 2> /dev/null; then
+            echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: SHOUTRRR URL"
+            echo "$DATUM    INFO !!!  - Schaue unter https://containrrr.dev/shoutrrr/ nach dem richtigen URL Format"
+            echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
+            sleep infinity
+        else
+            echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: SHOUTRRR URL"
+        fi
     else
-        echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: SHOUTRRR URL"
+        echo "$DATUM  SHOUTRRR    - Sie haben die Shoutrrr Testnachricht übersprungen."
     fi
+
 fi
 
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
