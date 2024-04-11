@@ -18,7 +18,7 @@ trigger:
   event:
   - custom
   - push
-  - pull_request
+  # - pull_request
 
 ---
 kind: pipeline
