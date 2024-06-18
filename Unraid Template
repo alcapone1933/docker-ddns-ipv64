@@ -1,3 +1,42 @@
 Bitte ein Unraid Template erstellen und Issue Posting für Fragen/Probleme erlauben, wie bspw. das fehlen der Inhalte des DATA Ordner Inhalts, nicht nur Pull Requests: https://forums.unraid.net/topic/138284-hilfe-template-f%C3%BCr-docker-ddns-ipv64/
 
 Vielen Dank!
+
+Auszug aus der Docker Container xml Datei zur Unterstützung.
+
+
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>ddns-ipv64</Name>
+  <Repository>alcapone1933/ddns-ipv64</Repository>
+  <Registry>https://registry.hub.docker.com/r/alcapone1933/ddns-ipv64</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview/>
+  <Category/>
+  <WebUI/>
+  <TemplateURL/>
+  <Icon>https://v64.tech/uploads/default/original/1X/6a86bfcde3ef01d0bf82e5f05941fdab1d49627b.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled></DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="CRON_TIME" Target="CRON_TIME" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">*/15 * * * *</Config>
+  <Config Name="CRON_TIME_DIG" Target="CRON_TIME_DIG" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">*/30 * * * *</Config>
+  <Config Name="DOMAIN_IPV64" Target="DOMAIN_IPV64" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">hier domain.ipv64domain.de</Config>
+  <Config Name="DOMAIN_KEY" Target="DOMAIN_KEY" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">hier Account/Domain Update Token</Config>
+  <Config Name="DOMAIN_PRAEFIX_YES" Target="DOMAIN_PRAEFIX_YES" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">no</Config>
+  <Config Name="DOMAIN_PRAEFIX" Target="DOMAIN_PRAEFIX" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="IP_CHECK" Target="IP_CHECK" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">yes</Config>
+  <Config Name="PUID" Target="PUID" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">99</Config>
+  <Config Name="PGID" Target="PGID" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">100</Config>
+  <Config Name="UMASK" Target="UMASK" Default="" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">0000</Config>
+  <Config Name="Data" Target="/data" Default="" Mode="rw" Description="" Type="Path" Display="always" Required="false" Mask="false">/mnt/cache/appdata/ddns-ipv64</Config>
+</Container>
