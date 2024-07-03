@@ -3,7 +3,6 @@
 LOG_FILE="/data/log/cron.log"
 MAX_FILES=10
 MAX_LINES=1000
-
 LINE_COUNT=$(wc -l < "$LOG_FILE")
 
 if [ "$LINE_COUNT" -gt "$MAX_LINES" ]; then
@@ -14,9 +13,11 @@ if [ "$LINE_COUNT" -gt "$MAX_LINES" ]; then
     fi
   done
 
-  cp -a "$LOG_FILE" "$LOG_FILE.1.tmp"
-  cat /dev/null > "$LOG_FILE"
-  mv "$LOG_FILE.1.tmp" "$LOG_FILE.1"
+  if [ -e "$LOG_FILE" ]; then
+    cp -a "$LOG_FILE" "$LOG_FILE.1.tmp"
+    cat /dev/null > "$LOG_FILE"
+    mv "$LOG_FILE.1.tmp" "$LOG_FILE.1"
+  fi
 
   if [ -e "$LOG_FILE.$((MAX_FILES+1))" ]; then
     rm "$LOG_FILE.$((MAX_FILES+1))"

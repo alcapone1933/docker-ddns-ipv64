@@ -222,7 +222,7 @@ else
     Domain_default
 fi
 
-echo "0 * * * * /usr/local/bin/log-rotate.sh" >> /etc/cron.d/container_cronjob
+echo "*/30 * * * * /usr/local/bin/log-rotate.sh" >> /etc/cron.d/container_cronjob
 
 /usr/bin/crontab /etc/cron.d/container_cronjob
 /usr/sbin/crond
