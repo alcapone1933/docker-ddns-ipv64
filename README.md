@@ -90,7 +90,7 @@ docker run -d \
 ## Docker Compose
 
 ```yaml
-version: "3.9"
+# version: "3.9"
 services:
   ddns-ipv64:
     image: alcapone1933/ddns-ipv64:latest
