@@ -94,7 +94,7 @@ services:
   ddns-ipv64:
     image: alcapone1933/ddns-ipv64:latest
     container_name: ddns-ipv64
-    restart: always
+    restart: unless-stopped
     environment:
       - "TZ=Europe/Berlin"
       - "CRON_TIME=*/15 * * * *"
