@@ -1,4 +1,4 @@
-version: "3.9"
+# version: "3.9"
 services:
   ddns-ipv64:
     # build:
@@ -23,6 +23,8 @@ services:
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
+      # - "PUID=1000"
+      # - "PGID=1000"
 # volumes:
   # data:
     # name: ddns-ipv64_data

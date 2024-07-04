@@ -1,8 +1,8 @@
 #!/bin/bash
 
 LOG_FILE="/data/log/cron.log"
-MAX_FILES=10
-MAX_LINES=1000
+MAX_FILES=${MAX_FILES:-10}
+MAX_LINES=${MAX_LINES:-1000}
 LINE_COUNT=$(wc -l < "$LOG_FILE")
 
 if [ "$LINE_COUNT" -gt "$MAX_LINES" ]; then

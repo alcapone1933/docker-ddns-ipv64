@@ -37,9 +37,6 @@ echo "==========================================================================
 sleep 5
 ################################
 # Set user and group ID
-export PUID=${PUID:-0}
-export PGID=${PGID:-0}
-
 
 if [ "$PUID" != "0" ] || [ "$PGID" != "0" ]; then
     chown -R "$PUID":"$PGID" /data
@@ -54,7 +51,7 @@ if [ "$PUID" != "0" ] || [ "$PGID" != "0" ]; then
     fi
     echo "$DATUM  RECHTE      - Ornder /data UID: $PUID and GID: $PGID"
 fi
-
+MAX_LINES=1
 source /usr/local/bin/log-rotate.sh
 ################################
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
