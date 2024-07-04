@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <Name>ddns-ipv64-update</Name>
+  <Name>ddns-ipv64-updater -> Name muss mit Template Filename übereinstimmen bspw. erzeugt ddns-ipv64-updater eine neue my-ddns-ipv64-updater.xml weil die Datei unraid-my-ddns-ipv64.xml heißt</Name>
   <Repository>alcapone1933/ddns-ipv64:latest</Repository>
   <Registry>https://hub.docker.com/r/alcapone1933/ddns-ipv64</Registry>
   <Network>bridge</Network>
@@ -22,7 +22,7 @@
   <DonateText/>
   <DonateLink/>
   <Requires/>
-  <Config Name="Appdata" Target="/data" Default="" Mode="rw" Description="" Type="Path" Display="always" Required="false" Mask="false"/>
+  <Config Name="Appdata" Target="/data" Default="" Mode="rw" Description="" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/ddns-ipv64-update</Config>
   <Config Name="TZ" Target="TZ" Default="Europe/Berlin" Mode="" Description="Zeitzone" Type="Variable" Display="always" Required="true" Mask="false">Europe/Berlin</Config>
   <Config Name="CRON_TIME" Target="CRON_TIME" Default="*/15 * * * *" Mode="" Description="Zeitliche Abfrage f&#xFC;r die aktuelle IP" Type="Variable" Display="always" Required="true" Mask="false">*/15 * * * *</Config>
   <Config Name="CRON_TIME_DIG" Target="CRON_TIME_DIG" Default="*/30 * * * *" Mode="" Description="Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)" Type="Variable" Display="always" Required="true" Mask="false">*/30 * * * *</Config>
