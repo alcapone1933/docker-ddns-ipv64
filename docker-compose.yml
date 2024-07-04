@@ -1,12 +1,12 @@
-version: "3.9"
+# version: "3.9"
 services:
   ddns-ipv64:
     # build:
       # dockerfile: ./Dockerfile
     image: alcapone1933/ddns-ipv64:latest
-    # image: alcapone1933/ddns-ipv64:v0.1.4
+    # image: alcapone1933/ddns-ipv64:v0.1.5
     container_name: ddns-ipv64
-    restart: always
+    restart: unless-stopped
     # volumes:
       # - data:/data
     environment:
@@ -23,6 +23,8 @@ services:
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
+      # - "PUID=1000"
+      # - "PGID=1000"
 # volumes:
   # data:
     # name: ddns-ipv64_data

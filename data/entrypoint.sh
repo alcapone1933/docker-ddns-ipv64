@@ -4,6 +4,7 @@
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 # cleanup
 cleanup() {
+    echo "=============================================================================================="
     echo "================================  STOP DDNS UPDATER IPV64.NET ================================"
     echo "=============================================================================================="
     echo "=========================  ######     #######    #######    #######  ========================="
@@ -19,8 +20,8 @@ cleanup() {
 # Trap SIGTERM
 trap 'cleanup' SIGTERM
 
-echo -n "" > /var/log/cron.log
-sleep 10
+sleep 5
+echo "=============================================================================================="
 echo "================================ START DDNS UPDATER IPV64.NET ================================"
 echo "=============================================================================================="
 echo "================  ######    ########     ##     ##     #######     ##    ##   ================"
@@ -32,6 +33,27 @@ echo "================    ##      ##             ## ##      ##     ##          #
 echo "================  ######    ##              ###        #######           ##   ================"
 echo "=============================================================================================="
 
+# echo -n "" > /data/log/cron.log
+sleep 5
+################################
+# Set user and group ID
+
+if [ "$PUID" != "0" ] || [ "$PGID" != "0" ]; then
+    chown -R "$PUID":"$PGID" /data
+    if [ ! -d "/data/log" ]; then
+        install -d -o $PUID -g $PGID -m 755 /data/log
+    fi
+    if [ ! -f "/data/log/cron.log" ]; then
+        install -o $PUID -g $PGID -m 644 /dev/null /data/log/cron.log
+    fi
+    if [ ! -f "/data/updip.txt" ]; then
+        install -o $PUID -g $PGID -m 644 /dev/null /data/updip.txt
+    fi
+    echo "$DATUM  RECHTE      - Ornder /data UID: $PUID and GID: $PGID"
+fi
+MAX_LINES=1
+source /usr/local/bin/log-rotate.sh
+################################
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
         echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
@@ -147,14 +169,14 @@ else
     fi
 fi
 
-echo "${CRON_TIME} /bin/bash /data/ddns-update.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
+echo "${CRON_TIME} /bin/bash /usr/local/bin/ddns-update.sh >> /data/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
 if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-    echo "${CRON_TIME_DIG} sleep 20 && /bin/bash /data/domain-ip-scheck.sh >> /var/log/cron.log 2>&1" >> /etc/cron.d/container_cronjob
+    echo "${CRON_TIME_DIG} sleep 20 && /bin/bash /usr/local/bin/domain-ip-scheck.sh >> /data/log/cron.log 2>&1" >> /etc/cron.d/container_cronjob
 else
     echo > /dev/null
 fi
-# echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @${NAME_SERVER}`" >> /var/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
-# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`" >> /var/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
+# echo "$CRON_TIME_DIG" 'sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @${NAME_SERVER}`" >> /data/log/cron.log 2>&1' >> /etc/cron.d/container_cronjob
+# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`" >> /data/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
 }
 
 function Domain_mit_praefix() {
@@ -182,13 +204,13 @@ else
     fi
 fi
 
-echo "${CRON_TIME} /bin/bash /data/ddns-update-praefix.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
+echo "${CRON_TIME} /bin/bash /usr/local/bin/ddns-update-praefix.sh >> /data/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
 if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-    echo "${CRON_TIME_DIG} sleep 20 && /bin/bash /data/domain-ip-scheck.sh >> /var/log/cron.log 2>&1" >> /etc/cron.d/container_cronjob
+    echo "${CRON_TIME_DIG} sleep 20 && /bin/bash /usr/local/bin/domain-ip-scheck.sh >> /data/log/cron.log 2>&1" >> /etc/cron.d/container_cronjob
 else
     echo > /dev/null
 fi
-# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`" >> /var/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
+# echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`" >> /data/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
 }
 
 if [[ "$DOMAIN_PRAEFIX_YES" =~ (YES|yes|Yes) ]] ; then
@@ -197,10 +219,12 @@ else
     Domain_default
 fi
 
+echo "*/30 * * * * /usr/local/bin/log-rotate.sh" >> /etc/cron.d/container_cronjob
+
 /usr/bin/crontab /etc/cron.d/container_cronjob
 /usr/sbin/crond
 echo "=============================================================================================="
-set tail -f /var/log/cron.log "$@"
+set tail -f /data/log/cron.log "$@"
 exec "$@" &
 
 wait $!

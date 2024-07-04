@@ -83,18 +83,19 @@ docker run -d \
     -e "SHOUTRRR_URL=" \
     -e "SHOUTRRR_SKIP_TEST=no" \
     -e "NAME_SERVER=ns1.ipv64.net" \
-
+    -e "PUID=1000" \
+    -e "PGID=1000" \
 ```
 
 ## Docker Compose
 
 ```yaml
-version: "3.9"
+# version: "3.9"
 services:
   ddns-ipv64:
     image: alcapone1933/ddns-ipv64:latest
     container_name: ddns-ipv64
-    restart: always
+    restart: unless-stopped
     environment:
       - "TZ=Europe/Berlin"
       - "CRON_TIME=*/15 * * * *"
@@ -108,6 +109,8 @@ services:
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
+      # - "PUID=1000"
+      # - "PGID=1000"
 ```
 
 &nbsp;
@@ -139,6 +142,9 @@ services:
 | SHOUTRRR URL: Deine Shoutrrr URL als Benachrichtigungsdienst z.b ( gotify,discord,telegram,email) | SHOUTRRR_URL       | ------------------ | [Shoutrrr-Beispiele](#shoutrrr-beispiele)    |
 | SHOUTRRR_SKIP_TEST: Beim Start des Containers wird keine Testnachricht gesendet                   | SHOUTRRR_SKIP_TEST | no                 | no     (yes oder no)                         |
 | NAME_SERVER: : Der Nameserver, um die IP-Adresse Ihrer Domain zu überprüfen                       | NAME_SERVER        | ns1.ipv64.net      | ns1.ipv64.net                                |
+| PUID: Rechte für Benutzer-ID des Ornder /data im Container                                        | PUID               | 0                  | 1000                                         |
+| PGID: Rechte für Gruppen-ID des Ornder /data im Container                                         | PGID               | 0                  | 1000                                         |
+
 
 * * *
 
