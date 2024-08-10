@@ -37,7 +37,6 @@ echo "==========================================================================
 sleep 5
 ################################
 # Set user and group ID
-
 if [ "$PUID" != "0" ] || [ "$PGID" != "0" ]; then
     chown -R "$PUID":"$PGID" /data
     if [ ! -d "/data/log" ]; then
@@ -51,8 +50,14 @@ if [ "$PUID" != "0" ] || [ "$PGID" != "0" ]; then
     fi
     echo "$DATUM  RECHTE      - Ornder /data UID: $PUID and GID: $PGID"
 fi
-MAX_LINES=1
-source /usr/local/bin/log-rotate.sh
+if [ ! -d "/data/log" ]; then
+    install -d -o $PUID -g $PGID -m 755 /data/log
+fi
+if [ ! -f "/data/log/cron.log" ]; then
+    install -o $PUID -g $PGID -m 644 /dev/null /data/log/cron.log
+fi
+################################
+MAX_LINES=1 source /usr/local/bin/log-rotate.sh
 ################################
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
