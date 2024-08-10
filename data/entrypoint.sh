@@ -57,7 +57,7 @@ if [ ! -f "/data/log/cron.log" ]; then
     install -o $PUID -g $PGID -m 644 /dev/null /data/log/cron.log
 fi
 ################################
-MAX_LINES=1 source /usr/local/bin/log-rotate.sh
+MAX_LINES=1 /usr/local/bin/log-rotate.sh
 ################################
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
