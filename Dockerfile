@@ -17,7 +17,9 @@ ENV TZ=Europe/Berlin \
     SHOUTRRR_URL="" \
     SHOUTRRR_SKIP_TEST="no" \
     IP_CHECK="yes" \
-    NAME_SERVER="ns1.ipv64.net"
+    NAME_SERVER="ns1.ipv64.net" \
+    PUID="0" \
+    PGID="0"
 
 RUN apk add --update --no-cache tzdata curl bash tini bind-tools jq && \
     rm -rf /var/cache/apk/*
