@@ -29,7 +29,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
 COPY data /data
 COPY --from=alcapone1933/shoutrrr:latest /usr/local/bin/shoutrrr /usr/local/bin/shoutrrr
 RUN cd /data && chmod +x *.sh && mv /data/cronjob /etc/cron.d/container_cronjob && mv *.sh /usr/local/bin/ && \
-    touch /data/log/cron.log
+    touch /data/log/cron.log && touch /etc/.firstrun
 # VOLUME [ "/data" ]
 WORKDIR /data
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]

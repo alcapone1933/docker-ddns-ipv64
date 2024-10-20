@@ -121,7 +121,7 @@ services:
 
 | Name (Beschreibung) #Optional | Wert    | Standard              |
 | ----------------------------- | ------- | --------------------- |
-| Speicherort logs und script   | volume  | ddns-ipv64_data:/data |
+| Speicherort logs              | volume  | ddns-ipv64_data:/data |
 |                               |         | /dein Pfad:/data      |
 
 &nbsp;
@@ -144,7 +144,6 @@ services:
 | NAME_SERVER: : Der Nameserver, um die IP-Adresse Ihrer Domain zu überprüfen                       | NAME_SERVER        | ns1.ipv64.net      | ns1.ipv64.net                                |
 | PUID: Rechte für Benutzer-ID des Ornder /data im Container                                        | PUID               | 0                  | 1000                                         |
 | PGID: Rechte für Gruppen-ID des Ornder /data im Container                                         | PGID               | 0                  | 1000                                         |
-
 
 * * *
 
