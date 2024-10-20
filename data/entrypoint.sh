@@ -62,13 +62,13 @@ MAX_LINES=1 /usr/local/bin/log-rotate.sh
 ################################
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
-        echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schaue unter https://ipv64.net/dyndns nach bei Domain"
         sleep infinity
     else
         echo "$DATUM  PRAEFIX     - Sie haben ein DOMAIN PRAEFIX gesetzt"
     fi
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns nach bei Domain"
         sleep infinity
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
@@ -76,7 +76,7 @@ if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     fi
 else
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns nach bei Domain"
         sleep infinity
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
@@ -86,7 +86,7 @@ else
 fi
 
 if [ -z "${DOMAIN_KEY:-}" ] ; then
-    echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei DynDNS Updatehash"
+    echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schaue unter https://ipv64.net/dyndns nach bei DynDNS Updatehash"
     sleep infinity
 else
     echo "$DATUM  DOMAIN KEY  - Sie haben einen DOMAIN Key gesetzt"
@@ -178,7 +178,6 @@ if [ -f /etc/.firstrun ]; then
     fi
 else
     echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
-    echo "$DATUM  CHECK       - DEV"
 fi
 
 echo "${CRON_TIME} /bin/bash /usr/local/bin/ddns-update.sh >> /data/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
@@ -219,7 +218,6 @@ if [ -f /etc/.firstrun ]; then
     fi
 else
     echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
-    echo "$DATUM  CHECK       - DEV"
 fi
 
 echo "${CRON_TIME} /bin/bash /usr/local/bin/ddns-update-praefix.sh >> /data/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
