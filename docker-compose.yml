@@ -4,7 +4,7 @@ services:
     # build:
       # dockerfile: ./Dockerfile
     image: alcapone1933/ddns-ipv64:latest
-    # image: alcapone1933/ddns-ipv64:v0.1.5
+    # image: alcapone1933/ddns-ipv64:v0.1.6
     container_name: ddns-ipv64
     restart: unless-stopped
     # volumes:
@@ -19,7 +19,7 @@ services:
       # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
       # - "IP_CHECK=Yes"
-      - "DOMAIN_KEY=1234567890abcdefghijklmn"
+      - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"

@@ -61,13 +61,13 @@ MAX_LINES=1 /usr/local/bin/log-rotate.sh
 ################################
 if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     if [ -z "${DOMAIN_PRAEFIX:-}" ] ; then
-        echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  PRAEFIX     - Sie haben kein DOMAIN PRAEFIX gesetzt, schaue unter https://ipv64.net/dyndns nach bei Domain"
         sleep infinity
     else
         echo "$DATUM  PRAEFIX     - Sie haben ein DOMAIN PRAEFIX gesetzt"
     fi
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns nach bei Domain"
         sleep infinity
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
@@ -75,7 +75,7 @@ if [[ "${DOMAIN_PRAEFIX_YES}" =~ (YES|yes|Yes) ]] ; then
     fi
 else
     if [ -z "${DOMAIN_IPV64:-}" ] ; then
-        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei Domain"
+        echo "$DATUM  DOMAIN      - Sie haben keine DOMAIN gesetzt, schaue unter https://ipv64.net/dyndns nach bei Domain"
         sleep infinity
     else
         echo "$DATUM  DOMAIN      - Sie haben eine DOMAIN gesetzt"
@@ -85,7 +85,7 @@ else
 fi
 
 if [ -z "${DOMAIN_KEY:-}" ] ; then
-    echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schaue unter https://ipv64.net/dyndns.php nach bei DynDNS Updatehash"
+    echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schaue unter https://ipv64.net/dyndns nach bei DynDNS Updatehash"
     sleep infinity
 else
     echo "$DATUM  DOMAIN KEY  - Sie haben einen DOMAIN Key gesetzt"
@@ -149,29 +149,34 @@ fi
 IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4")
 
 function Domain_default() {
-CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
-# if [ "$CHECK" = "ok" ] ; then
-if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
-    echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
-    sleep 5
-    if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`"; done
-    else
-        echo > /dev/null
-    fi
-    echo "${IP}" > /data/updip.txt
-    sleep 2
-else
-    CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}" | grep -o "Updateintervall")
-    if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
+if [ -f /etc/.firstrun ]; then
+    CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
+    # if [ "$CHECK" = "ok" ] ; then
+    if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
-        echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
-        echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+        sleep 5
+        if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
+            for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`"; done
+        else
+            echo > /dev/null
+        fi
+        echo "${IP}" > /data/updip.txt
+        sleep 2
+        rm /etc/.firstrun
     else
-        echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: DOMAIN oder DOMAIN KEY"
-        echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
-        return
+        CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}" | grep -o "Updateintervall")
+        if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
+            echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
+            echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
+            echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+        else
+            echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: DOMAIN oder DOMAIN KEY"
+            echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
+            return
+        fi
     fi
+else
+    echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
 fi
 
 echo "${CRON_TIME} /bin/bash /usr/local/bin/ddns-update.sh >> /data/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
@@ -184,29 +189,34 @@ fi
 # echo "$CRON_TIME_DIG" 'sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`" >> /data/log/cron.log 2>&1; done' >> /etc/cron.d/container_cronjob
 }
 
-function Domain_mit_praefix() {
-CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}&output=min")
-if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
-    echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
-    sleep 5
-    if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-        for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`"; done
-    else
-        echo > /dev/null
-    fi
-    echo "${IP}" > /data/updip.txt
-    sleep 2
-else
-    CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}" | grep -o "Updateintervall")
-    if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
+function Domain_add_praefix() {
+if [ -f /etc/.firstrun ]; then
+    CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}&output=min")
+    if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
-        echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
-        echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+        sleep 5
+        if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
+            for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`"; done
+        else
+            echo > /dev/null
+        fi
+        echo "${IP}" > /data/updip.txt
+        sleep 2
+        rm /etc/.firstrun
     else
-        echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: DOMAIN mit PRAEFIX oder DOMAIN KEY"
-        echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
-        return
+        CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}" | grep -o "Updateintervall")
+        if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
+            echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
+            echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
+            echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+        else
+            echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: DOMAIN mit PRAEFIX oder DOMAIN KEY"
+            echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
+            return
+        fi
     fi
+else
+    echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
 fi
 
 echo "${CRON_TIME} /bin/bash /usr/local/bin/ddns-update-praefix.sh >> /data/log/cron.log 2>&1" > /etc/cron.d/container_cronjob
@@ -219,7 +229,7 @@ fi
 }
 
 if [[ "$DOMAIN_PRAEFIX_YES" =~ (YES|yes|Yes) ]] ; then
-    Domain_mit_praefix
+    Domain_add_praefix
 else
     Domain_default
 fi

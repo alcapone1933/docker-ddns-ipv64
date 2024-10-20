@@ -24,7 +24,7 @@ Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments v
 
 ### Domain
 
-  * Hier bitte deine DOMAIN eintragen (ersetzen), die unter https://ipv64.net/dyndns.php erstellt wurde, z.B "deine-domain.ipv64.net"
+  * Hier bitte deine DOMAIN eintragen (ersetzen), die unter https://ipv64.net/dyndns erstellt wurde, z.B "deine-domain.ipv64.net"
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net"`
 
@@ -40,7 +40,7 @@ Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments v
 
     `-e "DOMAIN_PRAEFIX_YES=yes"`
   
-  * Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen), das unter https://ipv64.net/dyndns.php erstellt wurde:
+  * Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen), das unter https://ipv64.net/dyndns erstellt wurde:
 
     `-e "DOMAIN_PRAEFIX=ddns"`
 
@@ -55,9 +55,17 @@ Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments v
 ### Domain Key
 
   * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). \
-    Zu finden ist dieser unter https://ipv64.net/dyndns.php z.B "1234567890abcdefghijklmn"
+    Zu finden ist dieser unter https://ipv64.net/dyndns z.B "1234567890abcdefghijklmnopqrstuvwxyz"
+    
+    `-e "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"`
+    
+    &nbsp;
 
-    `-e "DOMAIN_KEY=1234567890abcdefghijklmn"`
+    Account Update Token oder Domain Key
+    
+    <img src="demo/account_key.png" alt="Account Update Token" width="600">
+
+    <img src="demo/domain_key.png" alt="Account Update Token oder Domain Key" width="600" height="600">
 
 &nbsp;
 
@@ -72,7 +80,7 @@ docker run -d \
     -e "CRON_TIME=*/15 * * * *" \
     -e "CRON_TIME_DIG=*/30 * * * *" \
     -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
-    -e "DOMAIN_KEY=1234567890abcdefghijklmn" \
+    -e "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz" \
     alcapone1933/ddns-ipv64:latest
 
 
@@ -105,7 +113,7 @@ services:
       # - "DOMAIN_PRAEFIX_YES=yes"
       # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
-      - "DOMAIN_KEY=1234567890abcdefghijklmn"
+      - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
@@ -121,7 +129,7 @@ services:
 
 | Name (Beschreibung) #Optional | Wert    | Standard              |
 | ----------------------------- | ------- | --------------------- |
-| Speicherort logs und script   | volume  | ddns-ipv64_data:/data |
+| Speicherort logs              | volume  | ddns-ipv64_data:/data |
 |                               |         | /dein Pfad:/data      |
 
 &nbsp;
@@ -133,8 +141,8 @@ services:
 | Zeitzone                                                                                          | TZ                 | Europe/Berlin      | Europe/Berlin                                |
 | Zeitliche Abfrage für die aktuelle IP                                                             | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
 | Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                             | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
-| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns.php   | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmn                     |
-| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns.php   | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
+| DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns       | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmnopqrstuvwxyz                     |
+| DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns       | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
 | DEINE DOMAINS: z.b. deine-domain.ipv64.net, deine-domain.ipv64.de                                 | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
 | DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                   | DOMAIN_PRAEFIX_YES | no                 | yes    (yes oder no)                         |
 | DEIN DOMAIN PRAEFIX (subdomain) : ⚠️ Nur ein Praefix verwenden ⚠️ z.b. ddns                      | DOMAIN_PRAEFIX     | ------------------ | ddns                                         |
@@ -144,7 +152,6 @@ services:
 | NAME_SERVER: : Der Nameserver, um die IP-Adresse Ihrer Domain zu überprüfen                       | NAME_SERVER        | ns1.ipv64.net      | ns1.ipv64.net                                |
 | PUID: Rechte für Benutzer-ID des Ornder /data im Container                                        | PUID               | 0                  | 1000                                         |
 | PGID: Rechte für Gruppen-ID des Ornder /data im Container                                         | PGID               | 0                  | 1000                                         |
-
 
 * * *
 
