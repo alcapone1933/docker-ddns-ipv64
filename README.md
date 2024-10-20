@@ -62,8 +62,10 @@ Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments v
     &nbsp;
 
     Account Update Token oder Domain Key
+    
+    <img src="demo/account_key.png" alt="Account Update Token" width="600">
 
-    <img src="demo/domain_key.png" alt="Account Update Token oder Domain Key" width="400" height="600"><img src="demo/account_key.png" alt="Account Update Token" width="400">
+    <img src="demo/domain_key.png" alt="Account Update Token oder Domain Key" width="600" height="600">
 
 &nbsp;
 
