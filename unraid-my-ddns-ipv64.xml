@@ -34,6 +34,7 @@
   <Config Name="SHOUTRRR_URL" Target="SHOUTRRR_URL" Default="" Mode="" Description="SHOUTRRR URL: Deine Shoutrrr URL als Benachrichtigungsdienst z.b ( gotify,discord,telegram,email)&#13;&#10;https://containrrr.dev/shoutrrr/latest/services/overview/" Type="Variable" Display="always" Required="false" Mask="false"></Config>
   <Config Name="SHOUTRRR_SKIP_TEST" Target="SHOUTRRR_SKIP_TEST" Default="no|yes" Mode="" Description="" Type="Variable" Display="always" Required="true" Mask="false">no</Config>
   <Config Name="NAME_SERVER" Target="NAME_SERVER" Default="ns1.ipv64.net" Mode="" Description="Der Nameserver, um die IP-Adresse Ihrer Domain zu &#xFC;berpr&#xFC;fen" Type="Variable" Display="always" Required="true" Mask="false">ns1.ipv64.net</Config>
+  <Config Name="NETWORK_CHECK" Target="NETWORK_CHECK" Default="no|yes" Mode="" Description="Es wird die Verbidung zu ipv64.net getestet" Type="Variable" Display="always" Required="true" Mask="false">no</Config>
   <Config Name="PUID" Target="PUID" Default="0" Mode="" Description="Rechte f&#xFC;r Benutzer-ID des Ornder /data im Container" Type="Variable" Display="always" Required="false" Mask="false">99</Config>
   <Config Name="PGID" Target="PGID" Default="0" Mode="" Description="PGID: Rechte f&#xFC;r Gruppen-ID des Ornder /data im Container" Type="Variable" Display="always" Required="false" Mask="false">100</Config>
 </Container>
