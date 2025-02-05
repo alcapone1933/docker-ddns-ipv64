@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # set -x
 # set -e
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+sleep 1
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 # cleanup
 cleanup() {
