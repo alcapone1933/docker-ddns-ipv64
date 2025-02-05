@@ -37,7 +37,6 @@ echo "==========================================================================
 sleep 5
 ################################
 # Set user and group ID
-
 if [ "$PUID" != "0" ] || [ "$PGID" != "0" ]; then
     chown -R "$PUID":"$PGID" /data
     if [ ! -d "/data/log" ]; then
