@@ -4,21 +4,21 @@ DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 # set -e
 if [[ "$NETWORK_CHECK" =~ (YES|yes|Yes) ]] ; then
     # if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
-    if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php" 2>&1 > /dev/null; then
+    if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php" 2>/dev/null; then
         echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
         STATUS="OK"
-        NAMESERVER_CHECK=$(dig +timeout=1 @${NAME_SERVER} 2> /dev/null)
+        NAMESERVER_CHECK=$(dig +timeout=1 @${NAME_SERVER} 2>/dev/null)
         echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
         if [ "${STATUS}" = "FAIL" ] ; then
             echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ${NAME_SERVER} ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
             echo "=============================================================================================="
         fi
-        if ! curl -4sf "https://google.de" 2>&1 > /dev/null; then
+        if ! curl -4sf "https://google.de" 2>/dev/null; then
             echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite google.de ist nicht erreichbar"
             echo "=============================================================================================="
             exit 1
         else
-            IP_INFO=$(curl -4sf "https://ipinfo.io/ip" 2>&1)
+            IP_INFO=$(curl -4sf "https://ipinfo.io/ip" 2>/dev/null)
             UPDIP=$(cat $PFAD/updip.txt)
             echo "$DATUM    INFO !!!  - Die Webseite google.de ist erreichbar. Ihre Aktuelle IP laut IPINFO.IO=$IP_INFO"
             if [ "$IP_INFO" = "$UPDIP" ]; then
@@ -29,7 +29,7 @@ if [[ "$NETWORK_CHECK" =~ (YES|yes|Yes) ]] ; then
                 else
                     echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
                     DOMAIN_NOTIFY=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "DOMAIN: ${DOMAIN} "; done)
-                    if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nIPV64.NET IST NICHT ERREICHBAR \nIHRE Aktuelle IP laut IPINFO.IO=$IP_INFO \n${DOMAIN_NOTIFY}"`" 2> /dev/null; then
+                    if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nIPV64.NET IST NICHT ERREICHBAR \nIHRE Aktuelle IP laut IPINFO.IO=$IP_INFO \n${DOMAIN_NOTIFY}"`" 2>/dev/null; then
                         echo "$DATUM  FEHLER !!!  - SHOUTRRR NACHRICHT konnte nicht gesendet werden"
                     else
                         echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
@@ -47,7 +47,7 @@ fi
 
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
 # IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
-IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4")
+IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4" 2>/dev/null)
 UPDIP=$(cat $PFAD/updip.txt)
 sleep 1
 
@@ -58,7 +58,7 @@ DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
 \n
 `for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  UPDATE !!! \nUpdate IP=$IP - Alte-IP=$UPDIP  \nDOMAIN: ${DOMAIN} \n"; done`"
 
-if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "${NOTIFY}"`" 2> /dev/null; then
+if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "${NOTIFY}"`" 2>/dev/null; then
     echo "$DATUM  FEHLER !!!  - SHOUTRRR NACHRICHT konnte nicht gesendet werden"
 else
     echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
@@ -72,7 +72,7 @@ else
     echo "$DATUM  UPDATE !!!  - Update IP=$IP - Alte-IP=$UPDIP"
     sleep 1
     # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
-    UPDATE_IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
+    UPDATE_IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min" 2>/dev/null)
     # if [ "$UPDATE_IP" = "ok" ] ; then
     if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP WURDE AN IPV64.NET GESENDET"
@@ -94,7 +94,7 @@ else
         else
             echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
             DOMAIN_NOTIFY=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "DOMAIN: ${DOMAIN} "; done)
-            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET \n${DOMAIN_NOTIFY}"`" 2> /dev/null; then
+            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET \n${DOMAIN_NOTIFY}"`" 2>/dev/null; then
                 echo "$DATUM  FEHLER !!!  - NACHRICHT konnte nicht gesendet werden"
             else
                 echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
