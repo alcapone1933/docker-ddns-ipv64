@@ -3,7 +3,7 @@ kind: pipeline
 type: docker
 name: BUILD-TEST
 steps:
-  - name: Build Multi-arch
+  - name: Build_Multi-arch
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
@@ -11,8 +11,6 @@ steps:
       repo: alcapone1933/ddns-ipv64
       tags: latest
       dry_run: true
-      build_args:
-        - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:
@@ -27,7 +25,7 @@ kind: pipeline
 type: docker
 name: BUILD-Dockerhub
 steps:
-  - name: Build Multi-arch
+  - name: Build_Multi-arch
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
@@ -40,8 +38,6 @@ steps:
       tags: v0.1.7,latest
       # auto_tag: true
       # auto_tag_suffix: v0.1.7
-      build_args:
-        - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:
@@ -59,7 +55,7 @@ kind: pipeline
 type: docker
 name: BUILD-TEST-DEV
 steps:
-  - name: Build Multi-arch
+  - name: Build_Multi-arch
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
@@ -67,8 +63,6 @@ steps:
       repo: alcapone1933/ddns-ipv64
       tags: dev
       dry_run: true
-      build_args:
-        - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:
@@ -83,7 +77,7 @@ kind: pipeline
 type: docker
 name: BUILD-Dockerhub-DEV
 steps:
-  - name: Build Multi-arch
+  - name: Build_Multi-arch
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
@@ -96,8 +90,6 @@ steps:
       tags: dev
       # auto_tag: true
       # auto_tag_suffix: dev
-      build_args:
-        - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:

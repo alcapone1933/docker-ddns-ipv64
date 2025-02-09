@@ -1,8 +1,8 @@
 FROM alcapone1933/alpine:latest
 # ipv64.net
-ARG BUILD_DATE
+ARG DOCKER_IMAGE_CREATED
 LABEL maintainer="alcapone1933 alcapone1933@cosanostra-cloud.de" \
-      org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.created="$DOCKER_IMAGE_CREATED" \
       org.opencontainers.image.authors="alcapone1933 alcapone1933@cosanostra-cloud.de" \
       org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/ddns-ipv64" \
       org.opencontainers.image.version="v0.1.7" \
