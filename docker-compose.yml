@@ -4,7 +4,7 @@ services:
     # build:
       # dockerfile: ./Dockerfile
     image: alcapone1933/ddns-ipv64:latest
-    # image: alcapone1933/ddns-ipv64:v0.1.6
+    # image: alcapone1933/ddns-ipv64:v0.1.7
     container_name: ddns-ipv64
     restart: unless-stopped
     # volumes:
@@ -23,6 +23,7 @@ services:
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
+      # - "NETWORK_CHECK=yes"
       # - "PUID=1000"
       # - "PGID=1000"
 # volumes:

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # set -x
 # set -e
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+sleep 1
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 # cleanup
 cleanup() {
@@ -101,35 +103,39 @@ if [ -z "${CRON_TIME_DIG:-}" ] ; then
     sleep infinity
 fi
 
-while true; do
-    # if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
-    if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php" 2>&1 > /dev/null; then
-        echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
-        sleep 900
-        echo "=============================================================================================="
-    else
-        break
-    fi
-done
-while true; do
-    STATUS="OK"
-    NAMESERVER_CHECK=$(dig +timeout=1 @${NAME_SERVER} 2> /dev/null)
-    echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
-    if [ "${STATUS}" = "FAIL" ] ; then
-        echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ${NAME_SERVER} ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
-        sleep 900
-        echo "=============================================================================================="
-    else
-        break
-    fi
-done
+if [[ "$NETWORK_CHECK" =~ (YES|yes|Yes) ]] ; then
+    while true; do
+        # if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
+        if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php" 2>/dev/null; then
+            echo "$DATUM  FEHLER !!!  - 404 Sie haben kein Netzwerk oder Internetzugang oder die Webseite ipv64.net ist nicht erreichbar"
+            sleep 900
+            echo "=============================================================================================="
+        else
+            break
+        fi
+    done
+    while true; do
+        STATUS="OK"
+        NAMESERVER_CHECK=$(dig +timeout=1 @${NAME_SERVER} 2>/dev/null)
+        echo "$NAMESERVER_CHECK" | grep -s -q "timed out" && { NAMESERVER_CHECK="Timeout" ; STATUS="FAIL" ; }
+        if [ "${STATUS}" = "FAIL" ] ; then
+            echo "$DATUM  FEHLER !!!  - 404 NAMESERVER ${NAME_SERVER} ist nicht ist nicht erreichbar. Sie haben kein Netzwerk oder Internetzugang"
+            sleep 900
+            echo "=============================================================================================="
+        else
+            break
+        fi
+    done
+else
+    echo > /dev/null
+fi
 
 if [ -z "${SHOUTRRR_URL:-}" ] ; then
     echo "$DATUM  SHOUTRRR    - Sie haben keine SHOUTRRR URL gesetzt"
 else
     echo "$DATUM  SHOUTRRR    - Sie haben eine  SHOUTRRR URL gesetzt"
     if [[ "${SHOUTRRR_SKIP_TEST}" =~ (NO|no|No) ]] ; then
-        if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  TEST !!! \nDDNS Updater in Docker fuer Free DynDNS IPv64.net"`" 2> /dev/null; then
+        if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  TEST !!! \nDDNS Updater in Docker fuer Free DynDNS IPv64.net"`" 2>/dev/null; then
             echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: SHOUTRRR URL"
             echo "$DATUM    INFO !!!  - Schaue unter https://containrrr.dev/shoutrrr/ nach dem richtigen URL Format"
             echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
@@ -146,11 +152,11 @@ fi
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
 # CHECK=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=$IP" | grep -o "success")
 # IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
-IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4")
+IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4" 2>/dev/null)
 
 function Domain_default() {
 if [ -f /etc/.firstrun ]; then
-    CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min")
+    CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min" 2>/dev/null)
     # if [ "$CHECK" = "ok" ] ; then
     if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
@@ -191,7 +197,7 @@ fi
 
 function Domain_add_praefix() {
 if [ -f /etc/.firstrun ]; then
-    CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}&output=min")
+    CHECK=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&praefix=${DOMAIN_PRAEFIX}&ip=${IP}&output=min" 2>/dev/null)
     if [[ "$CHECK" =~ (nochg|good|ok) ]] ; then
         echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
         sleep 5
