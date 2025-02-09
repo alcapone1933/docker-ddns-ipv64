@@ -91,7 +91,7 @@ docker run -d \
     -e "SHOUTRRR_URL=" \
     -e "SHOUTRRR_SKIP_TEST=no" \
     -e "NAME_SERVER=ns1.ipv64.net" \
-    -e "NETWORK_CHECK=no" \
+    -e "NETWORK_CHECK=yes" \
     -e "PUID=1000" \
     -e "PGID=1000" \
 ```
@@ -118,7 +118,7 @@ services:
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
-      # - "NETWORK_CHECK=no"
+      # - "NETWORK_CHECK=yes"
       # - "PUID=1000"
       # - "PGID=1000"
 ```
@@ -152,7 +152,7 @@ services:
 | SHOUTRRR URL: Deine Shoutrrr URL als Benachrichtigungsdienst z.b ( gotify,discord,telegram,email) | SHOUTRRR_URL       | ------------------ | [Shoutrrr-Beispiele](#shoutrrr-beispiele)    |
 | SHOUTRRR SKIP TEST: Beim Start des Containers wird keine Testnachricht gesendet                   | SHOUTRRR_SKIP_TEST | no                 | no     (yes oder no)                         |
 | NAME SERVER: Der Nameserver, um die IP-Adresse Ihrer Domain zu überprüfen                         | NAME_SERVER        | ns1.ipv64.net      | ns1.ipv64.net (ns2.ipv64.net  zb. 1.1.1.1)   |
-| NETWORK CHECK: Es wird die Verbidung zu ipv64.net getestet                                        | NETWORK_CHECK      | no                 | no     (yes oder no)                         |
+| NETWORK CHECK: Es wird die Verbidung zu ipv64.net getestet                                        | NETWORK_CHECK      | yes                | yes    (yes oder no)                         |
 | PUID: Rechte für Benutzer-ID des Ornder /data im Container                                        | PUID               | 0                  | 1000                                         |
 | PGID: Rechte für Gruppen-ID des Ornder /data im Container                                         | PGID               | 0                  | 1000                                         |
 

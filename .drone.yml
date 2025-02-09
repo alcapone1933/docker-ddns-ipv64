@@ -11,6 +11,8 @@ steps:
       repo: alcapone1933/ddns-ipv64
       tags: latest
       dry_run: true
+    build_args:
+      - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:
@@ -38,6 +40,8 @@ steps:
       tags: v0.1.7,latest
       # auto_tag: true
       # auto_tag_suffix: v0.1.7
+    build_args:
+      - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:
@@ -63,6 +67,8 @@ steps:
       repo: alcapone1933/ddns-ipv64
       tags: dev
       dry_run: true
+    build_args:
+      - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:
@@ -90,6 +96,8 @@ steps:
       tags: dev
       # auto_tag: true
       # auto_tag_suffix: dev
+    build_args:
+      - BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 trigger:
   branch:

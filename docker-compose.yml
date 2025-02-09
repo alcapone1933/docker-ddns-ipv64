@@ -23,7 +23,7 @@ services:
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
-      # - "NETWORK_CHECK=no"
+      # - "NETWORK_CHECK=yes"
       # - "PUID=1000"
       # - "PGID=1000"
 # volumes:

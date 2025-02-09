@@ -1,8 +1,9 @@
 FROM alcapone1933/alpine:latest
-# ipv64.net 
-LABEL maintainer="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
-      org.opencontainers.image.created="$(date +%Y-%m-%d\ %H:%M)" \
-      org.opencontainers.image.authors="alcapone1933 <alcapone1933@cosanostra-cloud.de>" \
+# ipv64.net
+ARG BUILD_DATE
+LABEL maintainer="alcapone1933 alcapone1933@cosanostra-cloud.de" \
+      org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.authors="alcapone1933 alcapone1933@cosanostra-cloud.de" \
       org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/ddns-ipv64" \
       org.opencontainers.image.version="v0.1.7" \
       org.opencontainers.image.ref.name="alcapone1933/ddns-ipv64" \
@@ -18,7 +19,7 @@ ENV TZ=Europe/Berlin \
     SHOUTRRR_SKIP_TEST="no" \
     IP_CHECK="yes" \
     NAME_SERVER="ns1.ipv64.net" \
-    NETWORK_CHECK="no" \
+    NETWORK_CHECK="yes" \
     PUID="0" \
     PGID="0"
 
