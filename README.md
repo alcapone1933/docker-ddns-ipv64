@@ -79,15 +79,15 @@ docker run -d \
     --name ddns-ipv64 \
     -e "CRON_TIME=*/15 * * * *" \
     -e "CRON_TIME_DIG=*/30 * * * *" \
-    -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
     -e "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz" \
+    -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
     alcapone1933/ddns-ipv64:latest
-
 
     -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de" \
     -e "DOMAIN_PRAEFIX_YES=yes" \
     "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
     -e "DOMAIN_PRAEFIX=ddns" \
+    -e "IP_CHECK=yes" \
     -e "SHOUTRRR_URL=" \
     -e "SHOUTRRR_SKIP_TEST=no" \
     -e "NAME_SERVER=ns1.ipv64.net" \
@@ -99,7 +99,6 @@ docker run -d \
 ## Docker Compose
 
 ```yaml
-# version: "3.9"
 services:
   ddns-ipv64:
     image: alcapone1933/ddns-ipv64:latest
@@ -109,12 +108,13 @@ services:
       - "TZ=Europe/Berlin"
       - "CRON_TIME=*/15 * * * *"
       - "CRON_TIME_DIG=*/30 * * * *"
+      - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
       # - "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
       # - "DOMAIN_PRAEFIX_YES=yes"
       # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
-      - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
+      # - "IP_CHECK=yes"
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
