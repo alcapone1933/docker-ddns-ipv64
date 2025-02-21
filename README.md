@@ -32,6 +32,8 @@ Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments v
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"`
 
+    💹 Hinweis: Wenn mehrere Domains verwendet werden, dann den [Account Update Token](#domain-Key) bei `DOMAIN_KEY=` eintragen.
+
 &nbsp;
 
 ### Domain Praefix
