@@ -152,7 +152,26 @@ fi
 # IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
 # CHECK=$(curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=$IP" | grep -o "success")
 # IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
-IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4" 2>/dev/null)
+# IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4" 2>/dev/null)
+PRIMARY_IP_SOURCES=(
+    "https://ipinfo.io/ip"
+    "https://ifconfig.me"
+    "https://icanhazip.com"
+    "https://api.ipify.org"
+    "https://ipecho.net/plain"
+    "https://ident.me"
+    "https://ipv64.net/ipcheck.php?ipv4"
+)
+
+for url_ip in "${PRIMARY_IP_SOURCES[@]}"; do
+    response=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "$url_ip" 2>/dev/null)
+    if [[ "$response" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        export IP_SOURCE="$url_ip"
+        break
+    fi
+done
+
+IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "$IP_SOURCE" 2>/dev/null)
 
 function Domain_default() {
 if [ -f /etc/.firstrun ]; then
