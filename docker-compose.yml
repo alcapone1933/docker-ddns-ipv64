@@ -3,7 +3,7 @@ services:
     # build:
       # dockerfile: ./Dockerfile
     image: alcapone1933/ddns-ipv64:latest
-    # image: alcapone1933/ddns-ipv64:v0.1.7
+    # image: alcapone1933/ddns-ipv64:v0.1.8
     container_name: ddns-ipv64
     restart: unless-stopped
     # volumes:
