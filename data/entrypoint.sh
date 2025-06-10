@@ -233,7 +233,7 @@ if [ -f /etc/.firstrun ]; then
         if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
             echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
             echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
-            echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+            echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesendet werden, wenn dein DynDNS Update Limit im grünen Bereich ist"
         else
             echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: DOMAIN mit PRAEFIX oder DOMAIN KEY"
             echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
