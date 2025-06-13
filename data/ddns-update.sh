@@ -102,7 +102,7 @@ else
         fi
         echo "$IP" > $PFAD/updip.txt
     else
-        echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET"
+        echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENDET"
         CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}" | grep -o "Updateintervall")
         if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
             echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
@@ -113,7 +113,7 @@ else
         else
             echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
             DOMAIN_NOTIFY=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "DOMAIN: ${DOMAIN} "; done)
-            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENTET \n${DOMAIN_NOTIFY}"`" 2>/dev/null; then
+            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENDET \n${DOMAIN_NOTIFY}"`" 2>/dev/null; then
                 echo "$DATUM  FEHLER !!!  - NACHRICHT konnte nicht gesendet werden"
             else
                 echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
