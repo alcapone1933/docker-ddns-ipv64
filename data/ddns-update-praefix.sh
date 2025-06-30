@@ -48,21 +48,25 @@ fi
 PRIMARY_IP_SOURCES=(
     "https://ipinfo.io/ip"
     "https://ifconfig.me"
+    "https://ifconfig.co/ip"
     "https://icanhazip.com"
     "https://api.ipify.org"
     "https://ipecho.net/plain"
     "https://ident.me"
+    "https://checkip.amazonaws.com"
+    "https://myexternalip.com/raw"
+    "https://wtfismyip.com/text"
+    "https://ip.tyk.nu"
+    "https://ipv4.icanhazip.com"
     "https://ipv64.net/ipcheck.php?ipv4"
 )
-
 for url_ip in "${PRIMARY_IP_SOURCES[@]}"; do
-    response=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "$url_ip" 2>/dev/null)
+    response=$(curl -4sSL --connect-timeout 2 --max-time 3 --user-agent "${CURL_USER_AGENT}" "$url_ip" 2>/dev/null)
     if [[ "$response" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         export IP_SOURCE="$url_ip"
         break
     fi
 done
-
 IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "$IP_SOURCE" 2>/dev/null)
 UPDIP=$(cat $PFAD/updip.txt)
 sleep 1
