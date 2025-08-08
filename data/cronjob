@@ -1,6 +1,11 @@
-# Cronjob DDNS Updater ipv64.net
+# Cronjob DDNS Updater ipv64.net with IPv6 Support
+# Main DDNS update job
 # */15 * * * * /bin/bash /usr/local/bin/ddns-update.sh >> /data/log/cron.log 2>&1
+
+# Domain IP check job (uses enhanced script with IPv4/IPv6 support)
 # */30 * * * * sleep 20 && /bin/bash /usr/local/bin/domain-ip-scheck.sh >> /data/log/cron.log 2>&1
+
+# Legacy IPv4-only checks (commented out - use domain-ip-scheck.sh instead)
 # */30 * * * * sleep 20 && echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN_IPV64} HAT DIE IP=`dig +short ${DOMAIN_IPV64} A @${NAME_SERVER}`" >> /data/log/cron.log 2>&1
 # */30 * * * * sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN} A @${NAME_SERVER}`" >> /data/log/cron.log 2>&1; done
 # */30 * * * * sleep 20 && for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "`date +%Y-%m-%d\ %H:%M:%S`  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IP=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`" >> /data/log/cron.log 2>&1; done
