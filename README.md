@@ -8,9 +8,9 @@
 
 &nbsp;
 
-# DDNS Updater in Docker für Free DynDNS [IPv64.net](https://ipv64.net/)
+# DDNS Updater in Docker für DynDNS [IPv64.net](https://ipv64.net/)
 
-Dieser Docker-Container ist ein DDNS-Updater für den kostenlosen DynDNS-Dienst von ipv64.net.\
+Dieser Docker-Container ist ein DDNS-Updater für den DynDNS-Dienst von ipv64.net.\
 Bei einer Änderung der IPv4- oder IPv6-Adresse am Standort wird die neue Adresse automatisch als A- bzw. AAAA-Record an ipv64.net übermittelt.
 
 Wenn Du dieses Docker-Projekt nutzen möchtest, passe bitte vor dem Start des Containers die Environment-Variablen entsprechend an.
@@ -218,8 +218,8 @@ services:
       # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
       # IPv4/IPv6 Kontrolle:
-      # - "IPV4_ENABLED=yes"
-      # - "IPV6_ENABLED=no"
+      - "IPV4_ENABLED=yes"
+      - "IPV6_ENABLED=yes"
       # Weitere Optionen:
       # - "IP_CHECK=yes"
       # - "SHOUTRRR_URL="
