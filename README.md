@@ -152,6 +152,10 @@ services:
 
 ## IPv6 Netzwerk in Docker einrichten
 
+<details>
+<summary markdown="span">Hier Klicken</summary>
+
+
 Für die vollständige Unterstützung von IPv6 in Docker müssen zusätzliche Konfigurationsschritte durchgeführt werden:
 
 ### 1. Docker Daemon für IPv6 konfigurieren
@@ -204,45 +208,79 @@ services:
     container_name: ddns-ipv64
     restart: unless-stopped
     network_mode: bridge
-    volumes:
-      - data:/data
     environment:
       - "TZ=Europe/Berlin"
       - "CRON_TIME=*/15 * * * *"
       - "CRON_TIME_DIG=*/30 * * * *"
       - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
-      # Erweiterte Optionen (optional):
-      # - "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
-      # - "DOMAIN_PRAEFIX_YES=yes"
-      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
-      # - "DOMAIN_PRAEFIX=ddns"
-      # IPv4/IPv6 Kontrolle:
       - "IPV4_ENABLED=yes"
       - "IPV6_ENABLED=yes"
-      # Weitere Optionen:
-      # - "IP_CHECK=yes"
-      # - "SHOUTRRR_URL="
-      # - "SHOUTRRR_SKIP_TEST=no"
-      # - "NAME_SERVER=ns1.ipv64.net"
-      # - "NETWORK_CHECK=yes"
-      # - "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9"
-      # Log-Rotation:
-      # - "MAX_FILES=10"
-      # - "MAX_LINES=1000"
-      # Benutzer-/Gruppen-IDs:
-      # - "PUID=1000"
-      # - "PGID=1000"
-volumes:
-  data:
-    name: ddns-ipv64_data
 ```
 
 ⚠️ **Wichtige Hinweise:**
 - Nach Änderungen an der `daemon.json` muss Docker immer neugestartet werden.
 - Stelle sicher, dass dein Host-System IPv6-Konnektivität hat.
 
-&nbsp;
+## Alternative: IPv6 nutzen ohne Änderungen an `daemon.json`
+
+Wenn du den Docker-Daemon nicht global auf IPv6 umstellen möchtest, kannst du ein eigenes IPv6-fähiges Docker-Netzwerk erstellen.
+Dies funktioniert sowohl mit Docker-CLI als auch mit Docker-Compose.
+
+### Variante A: Docker CLI
+
+Zuerst ein dediziertes IPv6-Netzwerk anlegen und anschließend den Container darin starten:
+
+```bash
+docker network create \
+  --ipv6 \
+  --subnet "2001:db8:1::/64" \
+  ddns-ipv64-net
+
+docker run -d \
+  --restart always \
+  --name ddns-ipv64 \
+  --network ddns-ipv64-net \
+  -e "CRON_TIME=*/15 * * * *" \
+  -e "CRON_TIME_DIG=*/30 * * * *" \
+  -e "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz" \
+  -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
+  -e "IPV4_ENABLED=yes" \
+  -e "IPV6_ENABLED=yes" \
+  alcapone1933/ddns-ipv64:latest
+```
+
+### Variante B: Docker-Compose
+
+```yaml
+services:
+  ddns-ipv64:
+    image: alcapone1933/ddns-ipv64:latest
+    container_name: ddns-ipv64
+    restart: unless-stopped
+    environment:
+      - "TZ=Europe/Berlin"
+      - "CRON_TIME=*/15 * * * *"
+      - "CRON_TIME_DIG=*/30 * * * *"
+      - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
+      - "DOMAIN_IPV64=deine-domain.ipv64.net"
+      - "IPV4_ENABLED=yes"
+      - "IPV6_ENABLED=yes"
+    networks:
+      - ddns-ipv64-net
+networks:
+  ddns-ipv64-net:
+    name: ddns-ipv64-net
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: "2001:db8:1::/64"
+```
+Damit erhält der Container eine IPv6-Adresse, ohne dass systemweit IPv6 im Docker-Daemon aktiviert werden muss.
+
+</details>
 
 ***
 
@@ -307,7 +345,7 @@ Nachricht: DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
            DOMAIN mit PRAEFIX: ddnd.deine-domain.ipv64.net
 ```
 
-Das sind Beispiele für Shoutrrr als Benachrichtigungsdienst, für weitere Services infos fidetest du hier [Shoutrrr](https://containrrr.dev/shoutrrr/latest/services/overview/)
+Das sind Beispiele für Shoutrrr als Benachrichtigungsdienst, für weitere Services infos fidetest du hier [Shoutrrr](https://shoutrrr.nickfedor.com/latest/services/overview/)
 
 | Service Name | URL Beispiel                                                                                      |
 | ------------ | ------------------------------------------------------------------------------------------------- |
