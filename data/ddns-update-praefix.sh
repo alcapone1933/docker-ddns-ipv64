@@ -11,14 +11,14 @@ IPV6_ENABLED=${IPV6_ENABLED:-"no"}
 if [[ "${IPV6_ENABLED}" =~ (YES|yes|Yes) ]]; then
     # Check if IPv6 is available on the system
     if ! ip -6 addr show scope global 2>/dev/null | grep -q "inet6"; then
-        echo "$DATUM  WARNING !!!  - IPv6 ist im System nicht verfügbar, deaktiviere IPv6-Funktionalität"
-        echo "$DATUM  INFO    !!!  - IPv6_ENABLED wird automatisch auf 'no' gesetzt"
+        echo "$DATUM  WARNING !!! - IPv6 ist im System nicht verfügbar, deaktiviere IPv6-Funktionalität"
+        echo "$DATUM  INFO    !!! - IPv6_ENABLED wird automatisch auf 'no' gesetzt"
         export IPV6_ENABLED="no"
     else
-        echo "$DATUM  INFO    !!!  - IPv6 ist verfügbar und aktiviert"
+        echo "$DATUM  INFO    !!! - IPv6 ist verfügbar und aktiviert"
     fi
 else
-    echo "$DATUM  INFO    !!!  - IPv6 ist deaktiviert (IPV6_ENABLED=${IPV6_ENABLED})"
+    echo "$DATUM  INFO    !!! - IPv6 ist deaktiviert (IPV6_ENABLED=${IPV6_ENABLED})"
 fi
 
 if [[ "$NETWORK_CHECK" =~ (YES|yes|Yes) ]] ; then
@@ -107,7 +107,7 @@ if [[ "$IPV4_ENABLED" =~ (YES|yes|Yes) ]] ; then
     done
     
     if [ -z "$IP" ]; then
-        echo "$DATUM  WARNUNG !!!  - Keine gültige IPv4-Adresse gefunden"
+        echo "$DATUM  WARNUNG !!! - Keine gültige IPv4-Adresse gefunden"
     fi
 else
     echo "$DATUM    INFO !!!  - IPv4 ist deaktiviert"
@@ -130,7 +130,7 @@ if [[ "$IPV6_ENABLED" =~ (YES|yes|Yes) ]] ; then
     done
     
     if [ -z "$IP6" ]; then
-        echo "$DATUM  WARNUNG !!!  - Keine gültige IPv6-Adresse gefunden"
+        echo "$DATUM  WARNUNG !!! - Keine gültige IPv6-Adresse gefunden"
     fi
 else
     echo "$DATUM    INFO !!!  - IPv6 ist deaktiviert"
