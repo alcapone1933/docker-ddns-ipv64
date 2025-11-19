@@ -7,7 +7,7 @@ steps:
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/riscv64
       repo: alcapone1933/ddns-ipv64
       tags: latest
       dry_run: true
@@ -33,7 +33,7 @@ steps:
         from_secret: DOCKER_USER
       password: 
         from_secret: DOCKER_PASS    
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/riscv64
       repo: alcapone1933/ddns-ipv64
       tags: v0.1.9,latest
       # auto_tag: true
@@ -59,7 +59,7 @@ steps:
     image: alcapone1933/drone:docker-buildx
     privileged: true
     settings:
-      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+      platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/riscv64
       repo: alcapone1933/ddns-ipv64
       tags: dev
       dry_run: true
