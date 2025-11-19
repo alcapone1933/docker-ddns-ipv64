@@ -5,7 +5,7 @@ LABEL maintainer="alcapone1933 alcapone1933@cosanostra-cloud.de" \
       org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.authors="alcapone1933 alcapone1933@cosanostra-cloud.de" \
       org.opencontainers.image.url="https://hub.docker.com/r/alcapone1933/ddns-ipv64" \
-      org.opencontainers.image.version="v0.1.8" \
+      org.opencontainers.image.version="v0.1.9" \
       org.opencontainers.image.ref.name="alcapone1933/ddns-ipv64" \
       org.opencontainers.image.title="DDNS Updater ipv64.net" \
       org.opencontainers.image.description="Community DDNS Updater fuer ipv64.net"
@@ -13,8 +13,8 @@ LABEL maintainer="alcapone1933 alcapone1933@cosanostra-cloud.de" \
 ENV TZ=Europe/Berlin \
     CRON_TIME="*/15 * * * *" \
     CRON_TIME_DIG="*/30 * * * *" \
-    VERSION="v0.1.8" \
-    CURL_USER_AGENT="docker-ddns-ipv64/version=v0.1.8 github.com/alcapone1933/docker-ddns-ipv64" \
+    VERSION="v0.1.9" \
+    CURL_USER_AGENT="DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9" \
     SHOUTRRR_URL="" \
     SHOUTRRR_SKIP_TEST="no" \
     IP_CHECK="yes" \
@@ -32,8 +32,8 @@ COPY data /data
 COPY --from=alcapone1933/shoutrrr:latest /usr/local/bin/shoutrrr /usr/local/bin/shoutrrr
 RUN cd /data && chmod +x *.sh && mv /data/cronjob /etc/cron.d/container_cronjob && mv *.sh /usr/local/bin/ && \
     touch /data/log/cron.log && touch /etc/.firstrun
+# HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=3 CMD curl -sSL --user-agent "${CURL_USER_AGENT}" --fail "https://ipv64.net" > /dev/null || exit 1
+# HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=2 CMD /usr/local/bin/healthcheck.sh
 # VOLUME [ "/data" ]
 WORKDIR /data
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
-# HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=3 CMD curl -sSL --user-agent "${CURL_USER_AGENT}" --fail "https://ipv64.net" > /dev/null || exit 1
-# HEALTHCHECK --interval=5s --timeout=30s --start-period=5s --retries=2 CMD /usr/local/bin/healthcheck.sh

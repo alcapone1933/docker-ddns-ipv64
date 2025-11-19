@@ -1,7 +1,26 @@
 #!/usr/bin/env bash
 PFAD="/data"
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
+
+# IPv6 support variables
+IPV4_ENABLED=${IPV4_ENABLED:-"yes"}
+IPV6_ENABLED=${IPV6_ENABLED:-"no"}
+
 # set -e
+# Check IPv6 availability if IPv6 is enabled
+if [[ "${IPV6_ENABLED}" =~ (YES|yes|Yes) ]]; then
+    # Check if IPv6 is available on the system
+    if ! ip -6 addr show scope global 2>/dev/null | grep -q "inet6"; then
+        echo "$DATUM  WARNING !!! - IPv6 ist im System nicht verfügbar, deaktiviere IPv6-Funktionalität"
+        echo "$DATUM  INFO    !!! - IPv6_ENABLED wird automatisch auf 'no' gesetzt"
+        export IPV6_ENABLED="no"
+    else
+        echo "$DATUM  INFO    !!! - IPv6 ist verfügbar und aktiviert"
+    fi
+else
+    echo "$DATUM  INFO    !!! - IPv6 ist deaktiviert (IPV6_ENABLED=${IPV6_ENABLED})"
+fi
+
 if [[ "$NETWORK_CHECK" =~ (YES|yes|Yes) ]] ; then
     # if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net" 2>&1 > /dev/null; then
     if ! curl -4sf --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php" 2>&1 > /dev/null; then
@@ -45,9 +64,7 @@ else
     echo > /dev/null
 fi
 
-# IP=$(curl -4s https://ipv64.net/wieistmeineip.php | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | tail -n 1)
-# IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?howismyip" | jq -r 'to_entries[] | "\(.value)"')
-# IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/ipcheck.php?ipv4" 2>/dev/null)
+# IPv4 IP detection sources
 PRIMARY_IP_SOURCES=(
     "https://ipinfo.io/ip"
     "https://ifconfig.me"
@@ -63,6 +80,7 @@ PRIMARY_IP_SOURCES=(
     "https://ipv4.icanhazip.com"
     "https://ipv64.net/ipcheck.php?ipv4"
 )
+<<<<<<< HEAD
 for url_ip in "${PRIMARY_IP_SOURCES[@]}"; do
     response=$(curl -4sSL --connect-timeout 2 --max-time 3 --user-agent "${CURL_USER_AGENT}" "$url_ip" 2>/dev/null)
     if [[ "$response" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -72,6 +90,74 @@ for url_ip in "${PRIMARY_IP_SOURCES[@]}"; do
 done
 IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "$IP_SOURCE" 2>/dev/null)
 UPDIP=$(cat $PFAD/updip.txt)
+=======
+
+# IPv6 IP detection sources
+IPV6_SOURCES=(
+    "https://ipv6.icanhazip.com"
+    "https://api64.ipify.org"
+    "https://ipv6.ident.me"
+    "https://v6.ident.me"
+    "https://ipv64.net/ipcheck.php?ipv6"
+    "https://ifconfig.co/ipv6"
+)
+
+# Detect IPv4 address
+IP=""
+IP_SOURCE=""
+if [[ "$IPV4_ENABLED" =~ (YES|yes|Yes) ]] ; then
+    echo "$DATUM    INFO !!!  - IPv4 Detection gestartet..."
+    for url_ip in "${PRIMARY_IP_SOURCES[@]}"; do
+        response=$(curl -4sSL --connect-timeout 2 --max-time 3 --user-agent "${CURL_USER_AGENT}" "$url_ip" 2>/dev/null)
+        if [[ "$response" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            export IP_SOURCE="$url_ip"
+            IP="$response"
+            echo "$DATUM    INFO !!!  - IPv4 gefunden: $IP (Quelle: $IP_SOURCE)"
+            break
+        fi
+    done
+    
+    if [ -z "$IP" ]; then
+        echo "$DATUM  WARNUNG !!! - Keine gültige IPv4-Adresse gefunden"
+    fi
+else
+    echo "$DATUM    INFO !!!  - IPv4 ist deaktiviert"
+fi
+
+# Detect IPv6 address
+IP6=""
+IP6_SOURCE=""
+if [[ "$IPV6_ENABLED" =~ (YES|yes|Yes) ]] ; then
+    echo "$DATUM    INFO !!!  - IPv6 Detection gestartet..."
+    for url_ip6 in "${IPV6_SOURCES[@]}"; do
+        response=$(curl -6sSL --connect-timeout 2 --max-time 3 --user-agent "${CURL_USER_AGENT}" "$url_ip6" 2>/dev/null)
+        # IPv6 regex pattern - basic validation
+        if [[ "$response" =~ ^[0-9a-fA-F:]+$ ]] && [[ "$response" == *":"* ]]; then
+            export IP6_SOURCE="$url_ip6"
+            IP6="$response"
+            echo "$DATUM    INFO !!!  - IPv6 gefunden: $IP6 (Quelle: $IP6_SOURCE)"
+            break
+        fi
+    done
+    
+    if [ -z "$IP6" ]; then
+        echo "$DATUM  WARNUNG !!! - Keine gültige IPv6-Adresse gefunden"
+    fi
+else
+    echo "$DATUM    INFO !!!  - IPv6 ist deaktiviert"
+fi
+
+# Check if we have at least one IP address
+if [ -z "$IP" ] && [ -z "$IP6" ]; then
+    echo "$DATUM  FEHLER !!!  - Keine IP-Adressen (IPv4 oder IPv6) gefunden"
+    echo "=============================================================================================="
+    exit 1
+fi
+
+# Read previous IP addresses
+UPDIP=$(cat $PFAD/updip.txt 2>/dev/null || echo "")
+UPDIP6=$(cat $PFAD/updip6.txt 2>/dev/null || echo "")
+>>>>>>> development
 sleep 1
 
 function SHOUTRRR_NOTIFY() {
@@ -79,7 +165,12 @@ echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
 NOTIFY="
 DOCKER DDNS UPDATER IPV64.NET - IP UPDATE !!!
 \n
-`for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  UPDATE !!! \nUpdate IP=$IP - Alte-IP=$UPDIP  \nDOMAIN: ${DOMAIN} \n"; done`"
+`for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do 
+    echo "$DATUM  UPDATE !!! \n"
+    [ -n "$IP" ] && echo "Update IPv4=$IP - Alte-IPv4=$UPDIP  \n"
+    [ -n "$IP6" ] && echo "Update IPv6=$IP6 - Alte-IPv6=$UPDIP6  \n"
+    echo "DOMAIN: ${DOMAIN} \n"
+done`"
 
 if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "${NOTIFY}"`" 2>/dev/null; then
     echo "$DATUM  FEHLER !!!  - SHOUTRRR NACHRICHT konnte nicht gesendet werden"
@@ -88,43 +179,88 @@ else
 fi
 }
 
-if [ "$IP" == "$UPDIP" ]; then
-    echo "$DATUM  KEIN UPDATE - Aktuelle IP=$UPDIP"
+# Check if update is needed
+UPDATE_NEEDED=false
+if [ -n "$IP" ] && [ "$IP" != "$UPDIP" ]; then
+    UPDATE_NEEDED=true
+    echo "$DATUM  IPv4 UPDATE ERFORDERLICH - Aktuelle IPv4=$IP - Alte IPv4=$UPDIP"
+fi
+
+if [ -n "$IP6" ] && [ "$IP6" != "$UPDIP6" ]; then
+    UPDATE_NEEDED=true
+    echo "$DATUM  IPv6 UPDATE ERFORDERLICH - Aktuelle IPv6=$IP6 - Alte IPv6=$UPDIP6"
+fi
+
+if [ "$UPDATE_NEEDED" = false ]; then
+    echo "$DATUM  KEIN UPDATE - IPv4=$IP IPv6=$IP6"
 else
     echo "$DATUM  UPDATE !!! ..."
-    echo "$DATUM  UPDATE !!!  - Update IP=$IP - Alte-IP=$UPDIP"
+    [ -n "$IP" ] && echo "$DATUM  UPDATE !!!  - Update IPv4=$IP - Alte-IPv4=$UPDIP"
+    [ -n "$IP6" ] && echo "$DATUM  UPDATE !!!  - Update IPv6=$IP6 - Alte-IPv6=$UPDIP6"
     sleep 1
-    # curl -4sSL "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min"
-    UPDATE_IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}&output=min" 2>/dev/null)
-    # if [ "$UPDATE_IP" = "ok" ] ; then
-    if [[ "$UPDATE_IP" =~ (nochg|good|ok) ]] ; then
-        echo "$DATUM  UPDATE !!!  - UPDATE IP=$IP WURDE AN IPV64.NET GESENDET"
+    
+    # Construct API URL with both IPv4 and IPv6 parameters
+    API_URL="https://ipv64.net/nic/update?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}"
+    
+    # Add IP addresses to URL
+    if [ -n "$IP" ]; then
+        API_URL="${API_URL}&ip=${IP}"
+    fi
+    
+    if [ -n "$IP6" ]; then
+        API_URL="${API_URL}&ip6=${IP6}"
+    fi
+    
+    API_URL="${API_URL}&output=min"
+    
+    echo "$DATUM    INFO !!!  - API Call: $API_URL"
+    UPDATE_RESPONSE=$(curl -sSL --user-agent "${CURL_USER_AGENT}" "$API_URL" 2>/dev/null)
+    
+    # Check response
+    if [[ "$UPDATE_RESPONSE" =~ (nochg|good|ok) ]] ; then
+        echo "$DATUM  UPDATE !!!  - UPDATE ERFOLGREICH AN IPV64.NET GESENDET"
+        [ -n "$IP" ] && echo "$DATUM  UPDATE !!!  - IPv4 $IP wurde aktualisiert"
+        [ -n "$IP6" ] && echo "$DATUM  UPDATE !!!  - IPv6 $IP6 wurde aktualisiert"
+        
         if [ -z "${SHOUTRRR_URL:-}" ] ; then
             echo > /dev/null
         else
             SHOUTRRR_NOTIFY
         fi
-        echo "$IP" > $PFAD/updip.txt
+        
+        # Save updated IP addresses
+        [ -n "$IP" ] && echo "$IP" > $PFAD/updip.txt
+        [ -n "$IP6" ] && echo "$IP6" > $PFAD/updip6.txt
     else
-        echo "$DATUM  FEHLER !!!  - UPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENDET"
-        CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}" | grep -o "Updateintervall")
-        if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
-            echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
-            echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesedet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+        echo "$DATUM  FEHLER !!!  - UPDATE WURDE NICHT AN IPV64.NET GESENDET"
+        echo "$DATUM  FEHLER !!!  - Server Response: $UPDATE_RESPONSE"
+        
+        # Check for rate limiting (using IPv4 for compatibility)
+        if [ -n "$IP" ]; then
+            CHECK_INTERVALL=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=${IP}" | grep -o "Updateintervall")
+            if [ "$CHECK_INTERVALL" == "Updateintervall" ]; then
+                echo "$DATUM  FEHLER !!!  - Dein DynDNS Update Limit ist wohl erreicht"
+                echo "$DATUM    INFO !!!  - Es kann erst wieder ein Update gesendet werden wenn dein DynDNS Update Limit im grünen Bereich ist"
+            fi
         fi
+        
         if [ -z "${SHOUTRRR_URL:-}" ] ; then
              echo > /dev/null
         else
             echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wird gesendet"
             DOMAIN_NOTIFY=$(for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "DOMAIN: ${DOMAIN} "; done)
-            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM    INFO !!! \n\nUPDATE IP=$IP WURDE NICHT AN IPV64.NET GESENDET \n${DOMAIN_NOTIFY}"`" 2>/dev/null; then
-                echo "$DATUM  FEHLER !!!  - NACHRICHT konnte nicht gesendet werden"
+            ERROR_MSG="$DATUM    INFO !!! \n\nUPDATE WURDE NICHT AN IPV64.NET GESENDET \n"
+            [ -n "$IP" ] && ERROR_MSG="${ERROR_MSG}IPv4=$IP \n"
+            [ -n "$IP6" ] && ERROR_MSG="${ERROR_MSG}IPv6=$IP6 \n"
+            ERROR_MSG="${ERROR_MSG}Server Response: $UPDATE_RESPONSE \n${DOMAIN_NOTIFY}"
+            
+            if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$ERROR_MSG"`" 2>/dev/null; then
+                echo "$DATUM  FEHLER !!!  - SHOUTRRR NACHRICHT konnte nicht gesendet werden"
             else
                 echo "$DATUM  SHOUTRRR    - SHOUTRRR NACHRICHT wurde gesendet"
             fi
         fi
     fi
-    # curl -4sSL https://ipv64.net/update.php?key=${DOMAIN_KEY}&domain=${DOMAIN_IPV64}&ip=<ipaddr>&ip6=<ip6addr>&output=min
 fi
 
 echo "=============================================================================================="

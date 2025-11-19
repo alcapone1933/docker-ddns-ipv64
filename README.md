@@ -8,13 +8,16 @@
 
 &nbsp;
 
-# DDNS Updater in Docker für Free DynDNS [IPv64.net](https://ipv64.net/) - NUR FÜR IPV4 -
+# DDNS Updater in Docker für Free DynDNS [IPv64.net](https://ipv64.net/)
 
-Dieser Docker Container ist ein DDNS Updater für Free DynDNS - ipv64.net.
+Dieser Docker-Container ist ein DDNS-Updater für den kostenlosen DynDNS-Dienst von ipv64.net.\
+Bei einer Änderung der IPv4- oder IPv6-Adresse am Standort wird die neue Adresse automatisch als A- bzw. AAAA-Record an ipv64.net übermittelt.
 
-Bei einer Änderung der ipv4 Adresse am Standort wird die neue ipv4 Adresse als A-Record an ipv64.net geschickt.
+Wenn Du dieses Docker-Projekt nutzen möchtest, passe bitte vor dem Start des Containers die Environment-Variablen entsprechend an.
+&nbsp;
 
-Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments vor dem Starten des Docker Containers.
+Nutzer von DS-Lite-Anschlüssen sollten beachten, dass in solchen Umgebungen oft keine echte öffentliche IPv4-Adresse verfügbar ist;\
+in diesem Fall kann es erforderlich sein, die IPv4-Aktualisierung zu deaktivieren, indem die Variable  `IPV4_ENABLED=no ` gesetzt wird.
 
 &nbsp;
 
@@ -79,23 +82,29 @@ Wenn Du dieses Docker Projekt nutzen möchtest, ändere bitte die Environments v
 docker run -d \
     --restart always \
     --name ddns-ipv64 \
+    -e "TZ=Europe/Berlin" \
     -e "CRON_TIME=*/15 * * * *" \
     -e "CRON_TIME_DIG=*/30 * * * *" \
     -e "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz" \
     -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
     alcapone1933/ddns-ipv64:latest
 
-    -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de" \
-    -e "DOMAIN_PRAEFIX_YES=yes" \
-    "⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️"
-    -e "DOMAIN_PRAEFIX=ddns" \
-    -e "IP_CHECK=yes" \
-    -e "SHOUTRRR_URL=" \
-    -e "SHOUTRRR_SKIP_TEST=no" \
-    -e "NAME_SERVER=ns1.ipv64.net" \
-    -e "NETWORK_CHECK=yes" \
-    -e "PUID=1000" \
-    -e "PGID=1000" \
+# Erweiterte Optionen (optional):
+#    -e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de" \
+#    -e "DOMAIN_PRAEFIX_YES=yes" \
+#    -e "DOMAIN_PRAEFIX=ddns" \
+#    -e "IPV4_ENABLED=yes" \
+#    -e "IPV6_ENABLED=no" \
+#    -e "IP_CHECK=yes" \
+#    -e "SHOUTRRR_URL=" \
+#    -e "SHOUTRRR_SKIP_TEST=no" \
+#    -e "NAME_SERVER=ns1.ipv64.net" \
+#    -e "NETWORK_CHECK=yes" \
+#    -e "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9" \
+#    -e "MAX_FILES=10" \
+#    -e "MAX_LINES=1000" \
+#    -e "PUID=1000" \
+#    -e "PGID=1000" \
 ```
 
 ## Docker Compose
@@ -112,18 +121,124 @@ services:
       - "CRON_TIME_DIG=*/30 * * * *"
       - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
       - "DOMAIN_IPV64=deine-domain.ipv64.net"
+      # Erweiterte Optionen (optional):
       # - "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
       # - "DOMAIN_PRAEFIX_YES=yes"
       # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
       # - "DOMAIN_PRAEFIX=ddns"
+      # IPv4/IPv6 Kontrolle:
+      # - "IPV4_ENABLED=yes"
+      # - "IPV6_ENABLED=no"
+      # Weitere Optionen:
       # - "IP_CHECK=yes"
       # - "SHOUTRRR_URL="
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
       # - "NETWORK_CHECK=yes"
+      # - "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9"
+      # Log-Rotation:
+      # - "MAX_FILES=10"
+      # - "MAX_LINES=1000"
+      # Benutzer-/Gruppen-IDs:
       # - "PUID=1000"
       # - "PGID=1000"
 ```
+
+&nbsp;
+
+***
+
+## IPv6 Netzwerk in Docker einrichten
+
+Für die vollständige Unterstützung von IPv6 in Docker müssen zusätzliche Konfigurationsschritte durchgeführt werden:
+
+### 1. Docker Daemon für IPv6 konfigurieren
+
+Erstelle oder bearbeite die Datei `/etc/docker/daemon.json`:
+
+```json
+{
+  "ipv6": true,
+  "fixed-cidr-v6": "2001:db8:1::/64",
+  "experimental": true,
+  "ip6tables": true
+}
+```
+
+### 2. Docker Service neustarten
+
+Nach der Konfiguration muss der Docker-Dienst neugestartet werden:
+
+```bash
+sudo systemctl restart docker
+```
+
+### 3. Container mit IPv6-Netzwerk starten
+
+Verwende das erstellte Netzwerk beim Starten des Containers:
+
+```bash
+docker run -d \
+    --restart always \
+    --name ddns-ipv64 \
+    --network_mode bridge \
+    -e "CRON_TIME=*/15 * * * *" \
+    -e "CRON_TIME_DIG=*/30 * * * *" \
+    -e "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz" \
+    -e "DOMAIN_IPV64=deine-domain.ipv64.net" \
+    -e "IPV4_ENABLED=yes" \
+    -e "IPV6_ENABLED=yes" \
+    alcapone1933/ddns-ipv64:latest
+```
+
+### 4. Docker Compose mit IPv6
+
+Für Docker Compose füge die Netzwerk-Konfiguration hinzu:
+
+```yaml
+services:
+  ddns-ipv64:
+    image: alcapone1933/ddns-ipv64:latest
+    container_name: ddns-ipv64
+    restart: unless-stopped
+    network_mode: bridge
+    volumes:
+      - data:/data
+    environment:
+      - "TZ=Europe/Berlin"
+      - "CRON_TIME=*/15 * * * *"
+      - "CRON_TIME_DIG=*/30 * * * *"
+      - "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"
+      - "DOMAIN_IPV64=deine-domain.ipv64.net"
+      # Erweiterte Optionen (optional):
+      # - "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"
+      # - "DOMAIN_PRAEFIX_YES=yes"
+      # ⚠️ Hier bitte nur ein DOMAIN PRAEFIX (subdomain) eintragen (ersetzen) ⚠️
+      # - "DOMAIN_PRAEFIX=ddns"
+      # IPv4/IPv6 Kontrolle:
+      # - "IPV4_ENABLED=yes"
+      # - "IPV6_ENABLED=no"
+      # Weitere Optionen:
+      # - "IP_CHECK=yes"
+      # - "SHOUTRRR_URL="
+      # - "SHOUTRRR_SKIP_TEST=no"
+      # - "NAME_SERVER=ns1.ipv64.net"
+      # - "NETWORK_CHECK=yes"
+      # - "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9"
+      # Log-Rotation:
+      # - "MAX_FILES=10"
+      # - "MAX_LINES=1000"
+      # Benutzer-/Gruppen-IDs:
+      # - "PUID=1000"
+      # - "PGID=1000"
+volumes:
+  data:
+    name: ddns-ipv64_data
+```
+
+⚠️ **Wichtige Hinweise:**
+- Nach Änderungen an der `daemon.json` muss Docker immer neugestartet werden.
+- Stelle sicher, dass dein Host-System IPv6-Konnektivität hat.
 
 &nbsp;
 
@@ -157,6 +272,8 @@ services:
 | NETWORK CHECK: Es wird die Verbidung zu ipv64.net getestet                                        | NETWORK_CHECK      | yes                | yes    (yes oder no)                         |
 | PUID: Rechte für Benutzer-ID des Ornder /data im Container                                        | PUID               | 0                  | 1000                                         |
 | PGID: Rechte für Gruppen-ID des Ornder /data im Container                                         | PGID               | 0                  | 1000                                         |
+| IPV4_ENABLED: Wenn aktiviert, wird die öffentliche IPv4-Adresse an ipv64.net gesendet             | IPV4_ENABLED       | yes                | yes    (yes oder no)                         |
+| IPV6_ENABLED: Wenn aktiviert, wird die öffentliche IPv6-Adresse an ipv64.net gesendet             | IPV6_ENABLED       | no                 | no    (yes oder no)                          |
 
 * * *
 
