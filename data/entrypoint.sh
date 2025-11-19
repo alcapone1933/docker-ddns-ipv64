@@ -190,16 +190,6 @@ PRIMARY_IP_SOURCES=(
     "https://ipv4.icanhazip.com"
     "https://ipv64.net/ipcheck.php?ipv4"
 )
-<<<<<<< HEAD
-for url_ip in "${PRIMARY_IP_SOURCES[@]}"; do
-    response=$(curl -4sSL --connect-timeout 2 --max-time 3 --user-agent "${CURL_USER_AGENT}" "$url_ip" 2>/dev/null)
-    if [[ "$response" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        export IP_SOURCE="$url_ip"
-        break
-    fi
-done
-IP=$(curl -4sSL --user-agent "${CURL_USER_AGENT}" "$IP_SOURCE" 2>/dev/null)
-=======
 IP=""
 IP_SOURCE=""
 if [[ "$IPV4_ENABLED" =~ (YES|yes|Yes) ]] ; then
@@ -241,7 +231,6 @@ if [[ "$IPV6_ENABLED" =~ (YES|yes|Yes) ]] ; then
 else
     echo > /dev/null
 fi
->>>>>>> development
 
 function Domain_default() {
 if [ -f /etc/.firstrun ]; then
