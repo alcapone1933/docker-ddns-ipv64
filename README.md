@@ -23,6 +23,8 @@ in diesem Fall kann es erforderlich sein, die IPv4-Aktualisierung zu deaktiviere
 
 ***
 
+Danke geht an :pray: @[lodzen](https://github.com/lodzen) für die Unterstützung bei dem code für ipv6.
+
 ## Erklärung
 
 ### Domain
