@@ -20,6 +20,7 @@ ENV TZ=Europe/Berlin \
     IP_CHECK="yes" \
     NAME_SERVER="ns1.ipv64.net" \
     NETWORK_CHECK="yes" \
+    IPV6_ENABLED="no" \
     PUID="0" \
     PGID="0"
 
