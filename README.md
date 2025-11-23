@@ -37,7 +37,7 @@ Danke geht an :pray: @[lodzen](https://github.com/lodzen) für die Unterstützun
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"`
 
-    💹 Hinweis: Wenn mehrere Domains verwendet werden, dann den [Account Key](#domain-Key) bei `DOMAIN_KEY=` eintragen.
+    💹 Hinweis: Wenn mehrere Domains verwendet werden, dann den [Account Key](#domain-key) bei `DOMAIN_KEY=` eintragen.
 
 &nbsp;
 
