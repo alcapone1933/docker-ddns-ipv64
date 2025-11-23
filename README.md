@@ -37,7 +37,7 @@ Danke geht an :pray: @[lodzen](https://github.com/lodzen) für die Unterstützun
 
     `-e "DOMAIN_IPV64=deine-domain.ipv64.net,deine-domain.ipv64.de"`
 
-    💹 Hinweis: Wenn mehrere Domains verwendet werden, dann den [Account Update Token](#domain-Key) bei `DOMAIN_KEY=` eintragen.
+    💹 Hinweis: Wenn mehrere Domains verwendet werden, dann den [Account Key](#domain-key) bei `DOMAIN_KEY=` eintragen.
 
 &nbsp;
 
@@ -68,11 +68,9 @@ Danke geht an :pray: @[lodzen](https://github.com/lodzen) für die Unterstützun
     
     &nbsp;
 
-    Account Update Token oder Domain Key
-    
-    <img src="demo/account_key.png" alt="Account Update Token" width="600">
-
-    <img src="demo/domain_key.png" alt="Account Update Token oder Domain Key" width="600" height="600">
+    Account Key oder Domain Key
+   
+    <img src="demo/domain_key_2.png" alt="Account Key oder Domain Key" width="600" height="600">
 
 &nbsp;
 
