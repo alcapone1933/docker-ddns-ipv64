@@ -22,6 +22,12 @@ else
     echo "$DATUM  INFO    !!! - IPv6 ist deaktiviert (IPV6_ENABLED=${IPV6_ENABLED})"
 fi
 
+if [ "$IPV4_ENABLED" = "no" ] && [ "$IPV6_ENABLED" = "no" ]; then
+    echo "$DATUM  WARNING !!! - Beide Variablen (IPV4_ENABLED=no und IPV6_ENABLED=no) sind sicht aktiv."
+    echo "$DATUM  WARNING !!! - Sowohl IPv4 als auch IPv6 sind deaktiviert. Es kann keine Aktualisierung durchgeführt werden."
+    echo "$DATUM     INFO !!! - Stoppen Sie den Container und starten Sie ihn mit einer aktiven Variable (IPV4_ENABLED=yes oder IPV6_ENABLED=yes) erneut."
+    sleep infinity
+fi
 # Health check status
 HEALTH_STATUS="OK"
 

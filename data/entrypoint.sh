@@ -53,6 +53,14 @@ if [[ "${IPV6_ENABLED}" =~ (YES|yes|Yes) ]]; then
 else
     echo "$DATUM  INFO    !!! - IPv6 ist deaktiviert (IPV6_ENABLED=${IPV6_ENABLED})"
 fi
+
+if [ "$IPV4_ENABLED" = "no" ] && [ "$IPV6_ENABLED" = "no" ]; then
+    echo "$DATUM  WARNING !!! - Beide Variablen (IPV4_ENABLED=no und IPV6_ENABLED=no) sind sicht aktiv."
+    echo "$DATUM  WARNING !!! - Sowohl IPv4 als auch IPv6 sind deaktiviert. Es kann keine Aktualisierung durchgeführt werden."
+    echo "$DATUM     INFO !!! - Stoppen Sie den Container und starten Sie ihn mit einer aktiven Variable (IPV4_ENABLED=yes oder IPV6_ENABLED=yes) erneut."
+    sleep infinity
+fi
+
 sleep 5
 
 ################################
@@ -159,7 +167,7 @@ else
     if [[ "${SHOUTRRR_SKIP_TEST}" =~ (NO|no|No) ]] ; then
         if ! /usr/local/bin/shoutrrr send --url "${SHOUTRRR_URL}" --message "`echo -e "$DATUM  TEST !!! \nDDNS Updater in Docker fuer Free DynDNS IPv64.net"`" 2>/dev/null; then
             echo "$DATUM  FEHLER !!!  - Die Angaben sind falsch  gesetzt: SHOUTRRR URL"
-            echo "$DATUM    INFO !!!  - Schaue unter https://containrrr.dev/shoutrrr/ nach dem richtigen URL Format"
+            echo "$DATUM    INFO !!!  - Schaue unter https://shoutrrr.nickfedor.com/latest/services/overview/ nach dem richtigen URL Format"
             echo "$DATUM    INFO !!!  - Stoppen sie den Container und Starten sie den Container mit den richtigen Angaben erneut"
             sleep infinity
         else
@@ -244,7 +252,9 @@ if [ -f /etc/.firstrun ]; then
         echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN und DOMAIN KEY"
         sleep 5
         if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-            for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IPv4=`dig +short ${DOMAIN} A @${NAME_SERVER}`"; done
+            if [[ "$IPV4_ENABLED" =~ (YES|yes|Yes) ]] ; then
+                for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IPv4=`dig +short ${DOMAIN} A @${NAME_SERVER}`"; done
+            fi
             if [[ "$IPV6_ENABLED" =~ (YES|yes|Yes) ]] ; then
                 for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN ${DOMAIN} HAT DIE IPv6=`dig +short ${DOMAIN} AAAA @${NAME_SERVER}`"; done
             fi
@@ -292,7 +302,9 @@ if [ -f /etc/.firstrun ]; then
         echo "$DATUM  CHECK       - Die Angaben sind richtig gesetzt: DOMAIN mit PRAEFIX und DOMAIN KEY"
         sleep 5
         if [[ "$IP_CHECK" =~ (YES|yes|Yes) ]] ; then
-            for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IPv4=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`"; done
+            if [[ "$IPV4_ENABLED" =~ (YES|yes|Yes) ]] ; then
+                for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IPv4=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} A @${NAME_SERVER}`"; done
+            fi
             if [[ "$IPV6_ENABLED" =~ (YES|yes|Yes) ]] ; then
                 for DOMAIN in $(echo "${DOMAIN_IPV64}" | sed -e "s/,/ /g"); do echo "$DATUM  IP CHECK    - Deine DOMAIN mit PRAEFIX ${DOMAIN_PRAEFIX}.${DOMAIN} HAT DIE IPv6=`dig +short ${DOMAIN_PRAEFIX}.${DOMAIN} AAAA @${NAME_SERVER}`"; done
             fi
