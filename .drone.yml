@@ -35,9 +35,9 @@ steps:
         from_secret: DOCKER_PASS    
       platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/riscv64
       repo: alcapone1933/ddns-ipv64
-      tags: v0.1.9,latest
+      tags: v0.1.10,latest
       # auto_tag: true
-      # auto_tag_suffix: v0.1.9
+      # auto_tag_suffix: v0.1.10
 
 trigger:
   branch:

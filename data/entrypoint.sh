@@ -116,6 +116,11 @@ else
     fi
 fi
 
+# Extrahiere nur den Key
+if echo "$DOMAIN_KEY" | grep -q 'key='; then
+    DOMAIN_KEY=$(echo "$DOMAIN_KEY" | sed -n 's/.*key=\([^&]*\).*/\1/p')
+fi
+
 if [ -z "${DOMAIN_KEY:-}" ] ; then
     echo "$DATUM  DOMAIN KEY  - Sie haben keinen DOMAIN Key gesetzt, schaue unter https://ipv64.net/dyndns nach bei DynDNS Updatehash"
     sleep infinity

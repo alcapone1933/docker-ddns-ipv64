@@ -26,7 +26,7 @@ services:
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
       # - "NETWORK_CHECK=yes"
-      # - "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9"
+      # - "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.10"
       # Log-Rotation:
       # - "MAX_FILES=10"
       # - "MAX_LINES=1000"

@@ -63,9 +63,15 @@ Danke geht an :pray: @[lodzen](https://github.com/lodzen) für die Unterstützun
 
   * Hier bitte dein DOMAIN KEY bzw. DynDNS Updatehash eintragen (ersetzen). \
     Zu finden ist dieser unter https://ipv64.net/dyndns z.B "1234567890abcdefghijklmnopqrstuvwxyz"
-    
+
     `-e "DOMAIN_KEY=1234567890abcdefghijklmnopqrstuvwxyz"`
-    
+
+    Sie können auch die Domain Update-URL oder Account Update-URL nutzen. \
+    Update-URL \
+    `-e "DOMAIN_KEY=https://ipv64.net/nic/update?key=1234567890abcdefghijklmnopqrstuvwxyz"` \
+    Account Update-URL \
+    `-e "DOMAIN_KEY=https://ipv64.net/nic/update?key=1234567890abcdefghijklmnopqrstuvwxyz&domain=deine-domain.ipv64.net"`
+
     &nbsp;
 
     Account Key oder Domain Key
@@ -100,7 +106,7 @@ docker run -d \
 #    -e "SHOUTRRR_SKIP_TEST=no" \
 #    -e "NAME_SERVER=ns1.ipv64.net" \
 #    -e "NETWORK_CHECK=yes" \
-#    -e "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9" \
+#    -e "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.10" \
 #    -e "MAX_FILES=10" \
 #    -e "MAX_LINES=1000" \
 #    -e "PUID=1000" \
@@ -135,7 +141,7 @@ services:
       # - "SHOUTRRR_SKIP_TEST=no"
       # - "NAME_SERVER=ns1.ipv64.net"
       # - "NETWORK_CHECK=yes"
-      # - "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.9"
+      # - "CURL_USER_AGENT=DDNS-Updater-IPv64_github.com/alcapone1933/docker-ddns-ipv64_version_v0.1.10"
       # Log-Rotation:
       # - "MAX_FILES=10"
       # - "MAX_LINES=1000"
@@ -299,6 +305,7 @@ Damit erhält der Container eine IPv6-Adresse, ohne dass systemweit IPv6 im Dock
 | Zeitliche Abfrage für die aktuelle IP                                                             | CRON_TIME          | */15 * * * *       | */15 * * * *                                 |
 | Zeitliche Abfrage auf die Domain (dig DOMAIN_IPV64 A)                                             | CRON_TIME_DIG      | */30 * * * *       | */30 * * * *                                 |
 | DOMAIN KEY: DEIN DOMAIN KEY bzw. DynDNS Updatehash zu finden unter https://ipv64.net/dyndns       | DOMAIN_KEY         | ------------------ | 1234567890abcdefghijklmnopqrstuvwxyz         |
+| DOMAIN KEY: Sie können auch die Domain Update-URL oder Account Update-URL nutzen                  | DOMAIN_KEY         | ------------------ | https://ipv64.net/nic/update?key=1234567890a |
 | DEINE DOMAIN:  z.b. deine-domain.ipv64.net zu finden unter         https://ipv64.net/dyndns       | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net                       |
 | DEINE DOMAINS: z.b. deine-domain.ipv64.net, deine-domain.ipv64.de                                 | DOMAIN_IPV64       | ------------------ | deine-domain.ipv64.net,deine-domain.ipv64.de |
 | DOMAIN PRAEFIX YES: Damit wird das Domain PRAEFIX aktiv genutzt                                   | DOMAIN_PRAEFIX_YES | no                 | yes    (yes oder no)                         |
