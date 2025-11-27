@@ -6,7 +6,11 @@ DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 IPV4_ENABLED=${IPV4_ENABLED:-"yes"}
 IPV6_ENABLED=${IPV6_ENABLED:-"no"}
 
-# set -e
+# Extrahiere nur den Key
+if echo "$DOMAIN_KEY" | grep -q 'key='; then
+    DOMAIN_KEY=$(echo "$DOMAIN_KEY" | sed -n 's/.*key=\([^&]*\).*/\1/p')
+fi
+
 # Check IPv6 availability if IPv6 is enabled
 if [[ "${IPV6_ENABLED}" =~ (YES|yes|Yes) ]]; then
     # Check if IPv6 is available on the system

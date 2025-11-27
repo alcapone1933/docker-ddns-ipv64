@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# set -e
 DATUM=$(date +%Y-%m-%d\ %H:%M:%S)
 
 # IPv6 support variables
